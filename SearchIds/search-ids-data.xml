@@ -276,7 +276,65 @@
 <item hex="173" dec="371" name="Gold Nugget"/>
 <item hex="174" dec="372" name="Nether Wart Seeds"/>
 <item hex="175" dec="373" id="0" name="Water Bottle"/>
-<item hex="175" dec="373" id="16" name="Potion"/>
+<item hex="175" dec="373" id="16" name="Akward (Potion)"/>
+<item hex="175" dec="373" id="32" name="Thick (Potion)"/>
+<item hex="175" dec="373" id="64" name="Mundane (Potion)"/>
+<item hex="175" dec="373" id="8192" name="Mundane (Potion)"/>
+<item hex="175" dec="373" id="8193" name="Regeneration (Potion)"/>
+<item hex="175" dec="373" id="8194" name="Swiftness (Potion)"/>
+<item hex="175" dec="373" id="8195" name="Fire Resist (Potion)"/>
+<item hex="175" dec="373" id="8196" name="Poison (Potion)"/>
+<item hex="175" dec="373" id="8197" name="Healing (Potion)"/>
+<item hex="175" dec="373" id="8200" name="Weakness (Potion)"/>
+<item hex="175" dec="373" id="8201" name="Strength (Potion)"/>
+<item hex="175" dec="373" id="8202" name="Slowness (Potion)"/>
+<item hex="175" dec="373" id="8204" name="Harming (Potion)"/>
+<item hex="175" dec="373" id="8225" name="Regeneration 2 (Potion)"/>
+<item hex="175" dec="373" id="8226" name="Swiftness 2 (Potion)"/>
+<item hex="175" dec="373" id="8227" name="Fire Resist 2 (Potion)"/>
+<item hex="175" dec="373" id="8228" name="Poison 2 (Potion)"/>
+<item hex="175" dec="373" id="8229" name="Healing 2 (Potion)"/>
+<item hex="175" dec="373" id="8232" name="Weakness 2 (Potion)"/>
+<item hex="175" dec="373" id="8233" name="Strength 2 (Potion)"/>
+<item hex="175" dec="373" id="8234" name="Slowness 2 (Potion)"/>
+<item hex="175" dec="373" id="8236" name="Harming 2 (Potion)"/>
+<item hex="175" dec="373" id="8257" name="Regeneration 3 (Potion)"/>
+<item hex="175" dec="373" id="8258" name="Swiftness 3 (Potion)"/>
+<item hex="175" dec="373" id="8259" name="Fire Resist 3 (Potion)"/>
+<item hex="175" dec="373" id="8260" name="Poison 3 (Potion)"/>
+<item hex="175" dec="373" id="8261" name="Healing 3 (Potion)"/>
+<item hex="175" dec="373" id="8264" name="Weakness 3 (Potion)"/>
+<item hex="175" dec="373" id="8265" name="Strength 3 (Potion)"/>
+<item hex="175" dec="373" id="8266" name="Slowness 3 (Potion)"/>
+<item hex="175" dec="373" id="8268" name="Harming 3 (Potion)"/>
+<item hex="175" dec="373" id="16384" name="Mundane (Splash Potion)"/>
+<item hex="175" dec="373" id="16385" name="Regeneration (Splash Potion)"/>
+<item hex="175" dec="373" id="16386" name="Swiftness (Splash Potion)"/>
+<item hex="175" dec="373" id="16387" name="Fire Resist (Splash Potion)"/>
+<item hex="175" dec="373" id="16388" name="Poison (Splash Potion)"/>
+<item hex="175" dec="373" id="16389" name="Healing (Splash Potion)"/>
+<item hex="175" dec="373" id="16392" name="Weakness (Splash Potion)"/>
+<item hex="175" dec="373" id="16393" name="Strength (Splash Potion)"/>
+<item hex="175" dec="373" id="16394" name="Slowness (Splash Potion)"/>
+<item hex="175" dec="373" id="16396" name="Harming (Splash Potion)"/>
+<item hex="175" dec="373" id="16417" name="Regeneration 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16418" name="Swiftness 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16419" name="Fire Resist 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16420" name="Poison 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16421" name="Healing 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16424" name="Weakness 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16425" name="Strength 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16426" name="Slowness 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16428" name="Harming 2 (Splash Potion)"/>
+<item hex="175" dec="373" id="16449" name="Regeneration 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16450" name="Swiftness 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16451" name="Fire Resist 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16452" name="Poison 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16453" name="Healing 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16456" name="Weakness 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16457" name="Strength 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16458" name="Slowness 3 (Splash Potion)"/>
+<item hex="175" dec="373" id="16460" name="Harming 3 (Splash Potion)"/>
 <item hex="176" dec="374" name="Glass Bottle"/>
 <item hex="177" dec="375" name="Spider Eye"/>
 <item hex="178" dec="376" name="Fermented Spider Eye"/>
