@@ -36,7 +36,7 @@ public class SearchIds extends Plugin{
 		etc.getInstance().addCommand("/" + searchCommand, " - Search for a block/item id");
 		if (!initProps()) {
 			log.severe("[SearchIds] Could not initialize " + propFile);
-			disable();
+			etc.getLoader().getPlugin(this.getName()).disable();
 			return;
 		}
 
@@ -48,23 +48,24 @@ public class SearchIds extends Plugin{
 			if (!autoUpdate) {
 				log.severe("[SearchIds] Set auto-update-data=true in " + propFile + " to automatically download the search data file " + dataXml);
 			}
-			etc.getLoader().getPlugin("SearchIds").disable();
+			etc.getLoader().getPlugin(this.getName()).disable();
 			return;
 		}
 
 		if (autoUpdate) {
-			if (this.updateThread == null)
-				this.updateThread = new UpdateThread(this);
-			this.updateThread.start();
+			if (updateThread == null){
+				updateThread = new UpdateThread(this);
+			}
+			updateThread.start();
 		}
 		log.info(name + " " + version + " enabled");
 	}
 
 	public void disable() {
 		etc.getInstance().removeCommand("/" + searchCommand);
-		if (this.updateThread != null) {
-			this.updateThread.stop();
-			this.updateThread = null;
+		if (updateThread != null) {
+			updateThread.stop();
+			updateThread = null;
 		}
 		parser = null;
 		log.info(name + " " + version + " disabled");
@@ -110,18 +111,18 @@ public class SearchIds extends Plugin{
 		}
 
 		File f = new File(dataXml);
-		if ((!updateData()) && (!f.exists())) {
+		if ((!updateData(updateSource)) && (!f.exists())) {
 			return false;
 		}
 
-		return parser.search("stone") != null;
+		return parser.search("test") != null;
 	}
 
-	public boolean updateData(){
+	public boolean updateData(String Source){
 		if (autoUpdate) {
 			try {
-				URL url = new URL(updateSource);
-				log.info(name + ": Updating data from " + updateSource + "...");
+				URL url = new URL(Source);
+				log.info(name + ": Updating data from " + Source + "...");
 				InputStream is = url.openStream();
 				FileOutputStream fos = null;
 				fos = new FileOutputStream(dataXml);
@@ -134,34 +135,14 @@ public class SearchIds extends Plugin{
 				log.info(name + ": Update Successful!");
 				return true;
 			} catch (MalformedURLException e) {
-				log.warning("[SearchIds] Update from "+ updateSource+" Failed. Attempting Alternate Source...");
-				return updateDataAlt();
-			} catch (IOException e) {
-				log.warning("[SearchIds] Could not update search data.");
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	public boolean updateDataAlt(){ //Alternate Update Source
-		if (autoUpdate) {
-			try {
-				URL url = new URL(updateSourceALT);
-				log.info(name + ": Updating data from " + updateSourceALT + "...");
-				InputStream is = url.openStream();
-				FileOutputStream fos = null;
-				fos = new FileOutputStream(dataXml);
-				int oneChar;
-				while ((oneChar = is.read()) != -1){
-					fos.write(oneChar);
+				if(Source.equals(updateSource)){
+					log.warning("[SearchIds] Update from "+ Source+" Failed. Attempting Alternate Source...");
+					return updateData(updateSourceALT);
 				}
-				is.close();
-				fos.close();
-				log.info(name + ": Update Successful!");
-			} catch (MalformedURLException e) {
-				log.warning("[SearchIds] Update from "+ updateSourceALT +" Failed.");
-				return false;
+				else{
+					log.warning("[SearchIds] Update from "+ Source +" Failed.");
+					return false;
+				}
 			} catch (IOException e) {
 				log.warning("[SearchIds] Could not update search data.");
 				return false;

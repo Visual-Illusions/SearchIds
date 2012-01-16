@@ -10,11 +10,11 @@ public class UpdateThread implements Runnable{
 	public void run() {
 		while (this.running) {
 			try {
-				Thread.sleep(SearchIds.autoUpdateInterval * 1000);
+				Thread.sleep(SearchIds.autoUpdateInterval);
 			} catch (InterruptedException localInterruptedException) {
 				SearchIds.log.warning("[SearchIds] An Error occured in UpdateThread.");
 			}
-			this.ids.updateData();
+			this.ids.updateData(SearchIds.updateSource);
 		}
 	}
 
