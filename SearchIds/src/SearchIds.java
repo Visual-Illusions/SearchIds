@@ -19,21 +19,21 @@ public class SearchIds extends Plugin{
 	public static String searchType = "all";
 	public static String dataXml = "plugins/config/SearchIds/search-ids-data.xml";
 	public static String updateSource = "http://www.visualillusionsent.net/SearchIds/search-ids-data.xml";
-	public static String updateSourceALT = "";
+	public static String updateSourceALT = "https://github.com/darkdiplomat/SearchIds/blob/master/SearchIds/search-ids-data.xml";
 	public static boolean autoUpdate = true;
 	public static String searchCommand = "search";
 	public static String consoleCommand = "search";
 	public static String base = "decimal";
 	public static String baseId = "decimal";
-	public static int nameWidth = 24;
+	public static int nameWidth = 25;
 	public static int numWidth = 4;
 	public static String delimiter = "-";
-	public static int autoUpdateInterval = 86400;
+	public static int autoUpdateInterval = 600000;
 	public static DataParser parser;
 	private UpdateThread updateThread;
 
 	public void enable(){
-		log.info(name + " " + version + " enabled");
+		etc.getInstance().addCommand("/" + searchCommand, " - Search for a block id");
 		if (!initProps()) {
 			log.severe(name + ": Could not initialise " + propFile);
 			disable();
@@ -48,7 +48,7 @@ public class SearchIds extends Plugin{
 			if (!autoUpdate) {
 				log.severe(name + ": Set auto-update-data=true in " + propFile + " to automatically download the search data file " + dataXml);
 			}
-			disable();
+			etc.getLoader().getPlugin("SearchIds").disable();
 			return;
 		}
 
@@ -57,7 +57,7 @@ public class SearchIds extends Plugin{
 				this.updateThread = new UpdateThread(this);
 			this.updateThread.start();
 		}
-		etc.getInstance().addCommand("/" + searchCommand, " - Search for a block id");
+		log.info(name + " " + version + " enabled");
 	}
 
 	public void disable() {
@@ -81,7 +81,7 @@ public class SearchIds extends Plugin{
 			dir.mkdirs();
 		}
 		props = new PropertiesFile(propFile);
-
+		
 		searchType = props.getString("search-type", searchType);
 		base = props.getString("base", base);
 		searchCommand = props.getString("command", searchCommand);
@@ -95,9 +95,9 @@ public class SearchIds extends Plugin{
 		numWidth = props.getInt("width-number", numWidth);
 		delimiter = props.getString("delimiter", delimiter);
 
-		if (autoUpdateInterval < 600) {
-			autoUpdateInterval = 600;
-			log.info(name + ": auto-update-interval cannot be less than 600");
+		if (autoUpdateInterval < 60000) {
+			autoUpdateInterval = 60000;
+			log.info(name + ": auto-update-interval cannot be less than 60000");
 		}
 
 		File file = new File(propFile);
@@ -114,7 +114,7 @@ public class SearchIds extends Plugin{
 			return false;
 		}
 
-		return parser.search("test") != null;
+		return parser.search("stone") != null;
 	}
 
 	public boolean updateData(){
@@ -173,7 +173,7 @@ public class SearchIds extends Plugin{
 	}
 
 	public void printSearchResults(Player player, ArrayList<Result> results, String query) {
-		if (results.size() > 0) {
+		if (results != null && !results.isEmpty()) {
 			player.sendMessage("§bSearch results for \"" + query + "\":");
 			Iterator<Result> itr = results.iterator();
 			String line = "";

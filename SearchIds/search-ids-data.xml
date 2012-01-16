@@ -257,7 +257,65 @@
 <item hex="160" dec="352" name="Bone"/>
 <item hex="161" dec="353" name="Sugar"/>
 <item hex="162" dec="354" name="Cake"/>
-<item hex="8D0" dec="2256" name="Gold record"/>
-<item hex="8D1" dec="2257" name="Green record"/>
+<item hex="163" dec="355" name="Bed"/>
+<item hex="164" dec="356" name="Redstone Repeater"/>
+<item hex="165" dec="357" name="Cookie"/>
+<item hex="166" dec="358" name="Map"/>
+<item hex="167" dec="359" name="Shears"/>
+<item hex="168" dec="360" name="Melon Slice"/>
+<item hex="169" dec="361" name="Pumpkin Seeds"/>
+<item hex="16A" dec="362" name="Melon Seeds"/>
+<item hex="16B" dec="363" name="Raw Beef"/>
+<item hex="16C" dec="364" name="Steak"/>
+<item hex="16D" dec="365" name="Raw Chicken"/>
+<item hex="16E" dec="366" name="Coocked Chicken"/>
+<item hex="16F" dec="367" name="Rotten Flesh"/>
+<item hex="170" dec="368" name="Ender Pearl"/>
+<item hex="171" dec="369" name="Blaze Rod"/>
+<item hex="172" dec="370" name="Ghast Tear"/>
+<item hex="173" dec="371" name="Gold Nugget"/>
+<item hex="174" dec="372" name="Nether Wart Seeds"/>
+<item hex="175" dec="373" id="0" name="Water Bottle"/>
+<item hex="175" dec="373" id="16" name="Potion"/>
+<item hex="176" dec="374" name="Glass Bottle"/>
+<item hex="177" dec="375" name="Spider Eye"/>
+<item hex="178" dec="376" name="Fermented Spider Eye"/>
+<item hex="179" dec="377" name="Blaze Powder"/>
+<item hex="17A" dec="378" name="Magma Cream"/>
+<item hex="17B" dec="379" name="Brewing Stand"/>
+<item hex="17C" dec="380" name="Cauldron"/>
+<item hex="17D" dec="381" name="Eye Of Ender"/>
+<item hex="17E" dec="382" name="Glistering Melon"/>
+<item hex="17F" dec="383" id="50" name="Creeper Egg"/>
+<item hex="17F" dec="383" id="51" name="Skeleton Egg"/>
+<item hex="17F" dec="383" id="52" name="Spider Egg"/>
+<item hex="17F" dec="383" id="54" name="Zombie Egg"/>
+<item hex="17F" dec="383" id="55" name="Slime Egg"/>
+<item hex="17F" dec="383" id="56" name="Ghast Egg"/>
+<item hex="17F" dec="383" id="57" name="PigZombie Egg"/>
+<item hex="17F" dec="383" id="58" name="Enderman Egg"/>
+<item hex="17F" dec="383" id="59" name="Cave Spider Egg"/>
+<item hex="17F" dec="383" id="60" name="SilverFish Egg"/>
+<item hex="17F" dec="383" id="61" name="Blaze Egg"/>
+<item hex="17F" dec="383" id="62" name="MagmaCube Egg"/>
+<item hex="17F" dec="383" id="90" name="Pig Egg"/>
+<item hex="17F" dec="383" id="91" name="Sheep Egg"/>
+<item hex="17F" dec="383" id="92" name="Cow Egg"/>
+<item hex="17F" dec="383" id="93" name="Chicken Egg"/>
+<item hex="17F" dec="383" id="94" name="Squid Egg"/>
+<item hex="17F" dec="383" id="95" name="Wolf Egg"/>
+<item hex="17F" dec="383" id="96" name="Mooshroom Egg"/>
+<item hex="17F" dec="383" id="120" name="Villager Egg"/>
+<item hex="8D0" dec="2256" name="13 (Record)"/>
+<item hex="8D1" dec="2257" name="Cat (Record)"/>
+<item hex="8D2" dec="2258" name="Blocks (Record)"/>
+<item hex="8D3" dec="2259" name="Chirp (Record)"/>
+<item hex="8D4" dec="2260" name="Far (Record)"/>
+<item hex="8D5" dec="2261" name="Mall (Record)"/>
+<item hex="8D6" dec="2262" name="Mellohi (Record)"/>
+<item hex="8D7" dec="2263" name="Stal (Record)"/>
+<item hex="8D8" dec="2264" name="Strad (Record)"/>
+<item hex="8D9" dec="2265" name="Ward (Record)"/>
+<item hex="8DA" dec="2266" name="11 (Record)"/>
 </items>
 </data>
