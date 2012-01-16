@@ -19,7 +19,7 @@ public class SearchIds extends Plugin{
 	public static String searchType = "all";
 	public static String dataXml = "plugins/config/SearchIds/search-ids-data.xml";
 	public static String updateSource = "http://www.visualillusionsent.net/SearchIds/search-ids-data.xml";
-	public static String updateSourceALT = "https://github.com/darkdiplomat/SearchIds/blob/master/SearchIds/search-ids-data.xml";
+	public static String updateSourceALT = "http://dl.dropbox.com/u/25586491/CanaryPlugins/SearchIds/search-ids-data.xml";
 	public static boolean autoUpdate = true;
 	public static String searchCommand = "search";
 	public static String consoleCommand = "search";
