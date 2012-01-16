@@ -33,9 +33,9 @@ public class SearchIds extends Plugin{
 	private UpdateThread updateThread;
 
 	public void enable(){
-		etc.getInstance().addCommand("/" + searchCommand, " - Search for a block id");
+		etc.getInstance().addCommand("/" + searchCommand, " - Search for a block/item id");
 		if (!initProps()) {
-			log.severe(name + ": Could not initialise " + propFile);
+			log.severe("[SearchIds] Could not initialize " + propFile);
 			disable();
 			return;
 		}
@@ -44,9 +44,9 @@ public class SearchIds extends Plugin{
 			parser = new DataParser();
 		}
 		if (!initData()) {
-			log.severe(name + ": Could not init the search data from: " + dataXml + ". Please check that the file exists and is not corrupt.");
+			log.severe("[SearchIds] Could not init the search data from: " + dataXml + ". Please check that the file exists and is not corrupt.");
 			if (!autoUpdate) {
-				log.severe(name + ": Set auto-update-data=true in " + propFile + " to automatically download the search data file " + dataXml);
+				log.severe("[SearchIds] Set auto-update-data=true in " + propFile + " to automatically download the search data file " + dataXml);
 			}
 			etc.getLoader().getPlugin("SearchIds").disable();
 			return;
@@ -97,7 +97,7 @@ public class SearchIds extends Plugin{
 
 		if (autoUpdateInterval < 60000) {
 			autoUpdateInterval = 60000;
-			log.info(name + ": auto-update-interval cannot be less than 60000");
+			log.warning("[SearchIds] auto-update-interval cannot be less than 60000! auto-update-interval set to 60000");
 		}
 
 		File file = new File(propFile);
@@ -131,16 +131,15 @@ public class SearchIds extends Plugin{
 				}
 				is.close();
 				fos.close();
-				log.info(name + ": Update complete!");
+				log.info(name + ": Update Successful!");
 				return true;
 			} catch (MalformedURLException e) {
-				log.warning("Update from "+ updateSource+" Failed. Attempting Alternate Source...");
+				log.warning("[SearchIds] Update from "+ updateSource+" Failed. Attempting Alternate Source...");
 				return updateDataAlt();
 			} catch (IOException e) {
-				log.severe(e.toString());
+				log.warning("[SearchIds] Could not update search data.");
+				return false;
 			}
-			log.warning(name + ": Could not update search data.");
-			return false;
 		}
 		return true;
 	}
@@ -159,15 +158,14 @@ public class SearchIds extends Plugin{
 				}
 				is.close();
 				fos.close();
-				log.info(name + ": Update complete!");
-				return true;
+				log.info(name + ": Update Successful!");
 			} catch (MalformedURLException e) {
-				log.warning(e.toString());
+				log.warning("[SearchIds] Update from "+ updateSourceALT +" Failed.");
+				return false;
 			} catch (IOException e) {
-				log.severe(e.toString());
+				log.warning("[SearchIds] Could not update search data.");
+				return false;
 			}
-			log.warning(name + ": Could not update search data.");
-			return false;
 		}
 		return true;
 	}
@@ -192,33 +190,74 @@ public class SearchIds extends Plugin{
 				}
 			}
 		}else{
-			player.sendMessage("§cNo results found");
+			player.sendMessage("§cNo results found.");
+		}
+	}
+	
+	public void printConsoleSearchResults(ArrayList<Result> results, String query) {
+		if (results != null && !results.isEmpty()) {
+			System.out.println("Search results for \"" + query + "\":");
+			Iterator<Result> itr = results.iterator();
+			String line = "";
+			int num = 0;
+			while (itr.hasNext()) {
+				num++;
+				Result result = itr.next();
+				line += (rightPad(result.getFullValue(), result.getValuePad()) + " " + delimiter + " " +rightPad(result.getName(), nameWidth));
+				if (num % 2 == 0 || !itr.hasNext()) {
+					System.out.println(line.trim());
+					line = "";
+				}
+				if (num > 16) {
+					System.out.println("Not all results are displayed. Make your term more specific!");
+					break;
+				}
+			}
+		}else{
+			System.out.println("No results found.");
 		}
 	}
 
 	public static String leftPad(String s, int width){
-		return String.format("%" + width + "s", new Object[] { s });
+		return String.format("%" + width + "s", s);
 	}
 
 	public static String rightPad(String s, int width) {
-		return String.format("%-" + width + "s", new Object[] { s });
+		return String.format("%-" + width + "s", s);
 	}
 	public class SearchListener extends PluginListener {
 		SearchIds p;
 
 		public SearchListener(SearchIds plugin) { this.p = plugin; }
 
-		public boolean onCommand(Player player, String[] split){
-			if ((split[0].equalsIgnoreCase("/" + SearchIds.searchCommand)) && (player.canUseCommand("/" + SearchIds.searchCommand))) {
-				if (split.length > 1) {
+		public boolean onCommand(Player player, String[] cmd){
+			if ((cmd[0].equalsIgnoreCase("/" + SearchIds.searchCommand)) && (player.canUseCommand("/" + SearchIds.searchCommand))) {
+				if (cmd.length > 1) {
 					String query = "";
-					for (int i = 1; i < split.length; i++) {
-						query = query + split[i] + " ";
+					for (int i = 1; i < cmd.length; i++) {
+						query = query + cmd[i] + " ";
 					}
 					query = query.trim();
 					SearchIds.this.printSearchResults(player, SearchIds.parser.search(query, SearchIds.base), query);
 				} else {
 					player.sendMessage("§cCorrect usage is: /" + SearchIds.searchCommand + " [item to search for]");
+				}
+				return true;
+			}
+			return false;
+		}
+		
+		public boolean onConsoleCommand(String[] cmd){
+			if (cmd[0].equalsIgnoreCase(SearchIds.consoleCommand)){
+				if (cmd.length > 1) {
+					String query = "";
+					for (int i = 1; i < cmd.length; i++) {
+						query = query + cmd[i] + " ";
+					}
+					query = query.trim();
+					SearchIds.this.printConsoleSearchResults(SearchIds.parser.search(query, SearchIds.base), query);
+				} else {
+					System.out.println("Correct usage is: " + SearchIds.consoleCommand + " [item to search for]");
 				}
 				return true;
 			}

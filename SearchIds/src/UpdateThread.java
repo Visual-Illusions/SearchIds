@@ -12,6 +12,7 @@ public class UpdateThread implements Runnable{
 			try {
 				Thread.sleep(SearchIds.autoUpdateInterval * 1000);
 			} catch (InterruptedException localInterruptedException) {
+				SearchIds.log.warning("[SearchIds] An Error occured in UpdateThread.");
 			}
 			this.ids.updateData();
 		}

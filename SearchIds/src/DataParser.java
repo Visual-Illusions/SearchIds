@@ -25,6 +25,7 @@ public class DataParser {
 			saxParser.parse(SearchIds.dataXml, handler);
 			return handler.getResults();
 		} catch (Exception e) {
+			log.warning("[SearchIds] An error occurred while getting Results");
 		}
 		return null;
 	}
@@ -78,7 +79,7 @@ public class DataParser {
 							}
 						}
 					} else {
-						log.severe("Name or value is null on an item");
+						log.warning("[SearchIds] Name or value is null on an item");
 					}
 				}
 			}
