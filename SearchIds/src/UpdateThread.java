@@ -6,26 +6,30 @@ public class UpdateThread implements Runnable{
 	public UpdateThread(SearchIds ids){
 		this.ids = ids;
 	}
-
+	
 	public void run() {
-		while (this.running) {
+		while (running) {
 			try {
 				Thread.sleep(SearchIds.autoUpdateInterval);
-			} catch (InterruptedException localInterruptedException) {
-				SearchIds.log.warning("[SearchIds] An Error occured in UpdateThread.");
+			} catch (InterruptedException IE) {
+				if(running){ //Only send message if running
+					SearchIds.log.warning("[SearchIds] An Error occured in UpdateThread.");
+				}
 			}
-			this.ids.updateData(SearchIds.updateSource);
+			if(running){ //Make sure we don't update if not running
+				ids.updateData(SearchIds.updateSource);
+			}
 		}
 	}
 
 	public void start() {
-		this.running = true;
-		this.thread = new Thread(this);
-		this.thread.start();
+		running = true;
+		thread = new Thread(this);
 	}
 
 	public void stop() {
-		this.running = false;
-		this.thread.interrupt();
+		running = false;
+		thread.interrupt();
+		thread = null;
 	}
 }

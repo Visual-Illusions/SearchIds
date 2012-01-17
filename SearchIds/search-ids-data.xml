@@ -140,6 +140,10 @@
 <item hex="72" dec="113" name="NetherBrick Fence"/>
 <item hex="73" dec="114" name="NetherBrick Stairs"/>
 <item hex="74" dec="115" name="Nether Wart"/>
+<item hex="75" dec="116" name="Enchantment Table"/>
+<item hex="79" dec="120" name="EndPortal Frame"/>
+<item hex="7A" dec="121" name="EndStone"/>
+<item hex="7B" dec="122" name="DragonEgg"/>
 </blocks>
 <items>
 <item hex="100" dec="256" name="Iron shovel"/>

@@ -12,7 +12,7 @@ public class SearchIds extends Plugin{
 	private SearchIds.SearchListener l = new SearchIds.SearchListener(this);
 	protected static final Logger log = Logger.getLogger("Minecraft");
 	public static String name = "SearchIds";
-	public static String version = "2.3";
+	public static String version = "2.3.1";
 
 	private static String propFile = "plugins/config/SearchIds/search-ids.properties";
 	private static PropertiesFile props;
