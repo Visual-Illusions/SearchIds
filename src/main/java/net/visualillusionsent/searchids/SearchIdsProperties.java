@@ -32,7 +32,7 @@ public enum SearchIdsProperties {
 
     public static String searchType = "all";
     public static String dataXml = "config/SearchIds/search-ids-data.xml";
-    public static String updateSource = "http://dl.visualillusionsent.net/SearchIds/search-ids-data.xml";
+    public static String updateSource = "http://dl.visualillusionsent.net/minecraft/plugins/SearchIds/search-ids-data.xml";
     public static String updateSourceALT = "https://raw.github.com/Visual-Illusions/SearchIds/v3/search-ids-data.xml";
     public static boolean autoUpdate = true;
     public static String base = "decimal";

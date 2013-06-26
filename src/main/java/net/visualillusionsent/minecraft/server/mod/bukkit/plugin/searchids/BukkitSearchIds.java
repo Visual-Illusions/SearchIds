@@ -54,7 +54,7 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
 
     public BukkitSearchIds() {
         readManifest();
-        vc = new VersionChecker(getName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
+        vc = new VersionChecker(getPluginName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
     }
 
     public final void onEnable() {
@@ -85,6 +85,9 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
             }
             updateThread.start();
         }
+        BukkitSearchCommandExecutor bscex = new BukkitSearchCommandExecutor(this);
+        getCommand("search").setExecutor(bscex);
+        getCommand("searchids").setExecutor(bscex);
     }
 
     public final void onDisable() {
@@ -303,5 +306,9 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
         }
         catch (URISyntaxException ex) {}
         return "plugins/SearchIds.jar";
+    }
+
+    public String getPluginName() {
+        return "SearchIds";
     }
 }
