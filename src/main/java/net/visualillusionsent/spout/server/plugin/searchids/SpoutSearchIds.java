@@ -55,7 +55,7 @@ public final class SpoutSearchIds extends Plugin implements SearchIds {
 
     public SpoutSearchIds() {
         readManifest();
-        vc = new VersionChecker(getName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
+        vc = new VersionChecker(getPluginName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
     }
 
     public final void onEnable() {
@@ -305,5 +305,9 @@ public final class SpoutSearchIds extends Plugin implements SearchIds {
         }
         catch (URISyntaxException ex) {}
         return "plugins/SearchIds.jar";
+    }
+
+    private final String getPluginName() {
+        return "SearchIds";
     }
 }

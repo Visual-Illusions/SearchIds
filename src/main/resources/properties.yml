@@ -1,7 +1,7 @@
 # SearchIds - Spout Plugin configuration file
 # Copyright © 2012-2013 Visual Illusions Entertainment
 name: SearchIds
-main: net.visualillusionsent.spout.server.plugin.searchids.SearchIds
+main: net.visualillusionsent.spout.server.plugin.searchids.SpoutSearchIds
 version: 3.0
 
 description: SearchIds Block/Item ID searching

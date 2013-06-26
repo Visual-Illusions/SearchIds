@@ -45,8 +45,8 @@ public class SpoutSearchCommandExecutor {
     @Command(aliases = { "search" }, usage = "<query>", desc = "Searches.")
     @Permissible("searchids.search")
     public void search(CommandSource source, CommandArguments args) throws CommandException {
-        if (args.length() > 1) {
-            String query = args.getJoinedString(1).trim();
+        if (args.length() > 0) {
+            String query = args.getJoinedString(0).trim();
             if (source instanceof Player) {
                 searchids.printSearchResults((Player) source, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
             }
