@@ -6,7 +6,7 @@
   <name>SearchIds</name>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <ProgramStatus>STABLE</ProgramStatus>
+    <ProgramStatus>ALPHA</ProgramStatus>
   </properties>
   <description>Block/Item ID (decimal/hexadecimal) searches</description>
   <licenses>

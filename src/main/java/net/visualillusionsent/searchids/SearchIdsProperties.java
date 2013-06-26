@@ -28,10 +28,8 @@ public enum SearchIdsProperties {
     public static String searchType = "all";
     public static String dataXml = "config/SearchIds/search-ids-data.xml";
     public static String updateSource = "http://www.visualillusionsent.net/SearchIds/search-ids-data.xml";
-    public static String updateSourceALT = "http://dl.dropbox.com/u/25586491/CanaryPlugins/SearchIds/search-ids-data.xml";
+    public static String updateSourceALT = "https://raw.github.com/Visual-Illusions/SearchIds/v3/search-ids-data.xml";
     public static boolean autoUpdate = true;
-    public static String searchCommand = "search";
-    public static String consoleCommand = "search";
     public static String base = "decimal";
     public static String baseId = "decimal";
     public static int nameWidth = 25;
@@ -49,8 +47,6 @@ public enum SearchIdsProperties {
         $.props = new PropertiesFile("config/SearchIds/SearchIds.cfg");
         searchType = $.props.getString("search-type", searchType);
         base = $.props.getString("base", base);
-        searchCommand = $.props.getString("command", searchCommand);
-        consoleCommand = $.props.getString("console-command", consoleCommand);
         dataXml = $.props.getString("data-xml", dataXml);
         updateSource = $.props.getString("update-source", updateSource);
         updateSourceALT = $.props.getString("update-source-Alternate", updateSourceALT);
@@ -63,6 +59,7 @@ public enum SearchIdsProperties {
             autoUpdateInterval = 60000;
             //log.warning("[SearchIds] auto-update-interval cannot be less than 60000! auto-update-interval set to 60000");
         }
+        $.props.save();
         return $.props != null;
     }
 
