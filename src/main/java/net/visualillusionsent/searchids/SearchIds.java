@@ -32,4 +32,12 @@ public interface SearchIds {
 
     public void severe(String msg);
 
+    public String getName();
+
+    public float getRawVersion();
+
+    public short getBuildNumber();
+
+    public String getBuildTime();
+
 }

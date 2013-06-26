@@ -25,6 +25,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
 import javax.xml.parsers.ParserConfigurationException;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.commandsys.CommandDependencyException;
@@ -34,14 +37,28 @@ import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIds;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.searchids.UpdateThread;
+import net.visualillusionsent.utils.ProgramStatus;
+import net.visualillusionsent.utils.VersionChecker;
 import org.xml.sax.SAXException;
 
 public final class CanarySearchIds extends Plugin implements SearchIds {
 
     public static DataParser parser;
     private UpdateThread updateThread;
+    private final VersionChecker vc;
+    private float version;
+    private short build;
+    private String buildTime;
+    private ProgramStatus status;
+
+    public CanarySearchIds() {
+        readManifest();
+        vc = new VersionChecker(getName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
+    }
 
     public final boolean enable() {
+        checkStatus();
+        checkVersion();
         if (!SearchIdsProperties.initProps()) {
             getLogman().severe("Could not initialize properties file");
             return false;
@@ -196,5 +213,93 @@ public final class CanarySearchIds extends Plugin implements SearchIds {
     @Override
     public void severe(String msg) {
         getLogman().severe(msg);
+    }
+
+    private final Manifest getManifest() throws Exception {
+        Manifest toRet = null;
+        Exception ex = null;
+        JarFile jar = null;
+        try {
+            jar = new JarFile(getJarPath());
+            toRet = jar.getManifest();
+        }
+        catch (Exception e) {
+            ex = e;
+        }
+        finally {
+            if (jar != null) {
+                try {
+                    jar.close();
+                }
+                catch (IOException e) {}
+            }
+            if (ex != null) {
+                throw ex;
+            }
+        }
+        return toRet;
+    }
+
+    private final void readManifest() {
+        try {
+            Manifest manifest = getManifest();
+            Attributes mainAttribs = manifest.getMainAttributes();
+            version = Float.parseFloat(mainAttribs.getValue("Version").replace("-SNAPSHOT", ""));
+            build = Short.parseShort(mainAttribs.getValue("Build"));
+            buildTime = mainAttribs.getValue("Build-Time");
+            try {
+                status = ProgramStatus.valueOf(mainAttribs.getValue("ProgramStatus"));
+            }
+            catch (IllegalArgumentException iaex) {
+                status = ProgramStatus.UNKNOWN;
+            }
+        }
+        catch (Exception ex) {
+            version = -1.0F;
+            build = -1;
+            buildTime = "19700101-0000";
+        }
+    }
+
+    private final void checkStatus() {
+        if (status == ProgramStatus.UNKNOWN) {
+            getLogman().severe(String.format("%s has declared itself as an 'UNKNOWN STATUS' build. Use is not advised and could cause damage to your system!", getName()));
+        }
+        else if (status == ProgramStatus.ALPHA) {
+            getLogman().warning(String.format("%s has declared itself as a 'ALPHA' build. Production use is not advised!", getName()));
+        }
+        else if (status == ProgramStatus.BETA) {
+            getLogman().warning(String.format("%s has declared itself as a 'BETA' build. Production use is not advised!", getName()));
+        }
+        else if (status == ProgramStatus.RELEASE_CANDIDATE) {
+            getLogman().info(String.format("%s has declared itself as a 'Release Candidate' build. Expect some bugs.", getName()));
+        }
+    }
+
+    private final void checkVersion() {
+        Boolean islatest = vc.isLatest();
+        if (islatest == null) {
+            getLogman().warning("VersionCheckerError: " + vc.getErrorMessage());
+        }
+        else if (!vc.isLatest()) {
+            getLogman().warning(vc.getUpdateAvailibleMessage());
+            getLogman().warning(String.format("You can view update info @ http://wiki.visualillusionsent.net/%s#ChangeLog", getName()));
+        }
+    }
+
+    public final float getRawVersion() {
+        return version;
+    }
+
+    public final short getBuildNumber() {
+        return build;
+    }
+
+    public final String getBuildTime() {
+        return buildTime;
+    }
+
+    public final VersionChecker getVersionChecker() {
+        return vc;
     }
 }

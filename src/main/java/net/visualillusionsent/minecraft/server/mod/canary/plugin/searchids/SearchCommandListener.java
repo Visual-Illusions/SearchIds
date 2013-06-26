@@ -19,12 +19,15 @@ package net.visualillusionsent.minecraft.server.mod.canary.plugin.searchids;
 
 import net.canarymod.Canary;
 import net.canarymod.api.entity.living.humanoid.Player;
+import net.canarymod.chat.Colors;
 import net.canarymod.chat.MessageReceiver;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.canarymod.commandsys.CommandListener;
+import net.visualillusionsent.searchids.SearchIdsInformation;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.StringUtils;
+import net.visualillusionsent.utils.VersionChecker;
 
 /**
  * SearchIds Command Listener
@@ -33,11 +36,13 @@ import net.visualillusionsent.utils.StringUtils;
  */
 public class SearchCommandListener implements CommandListener {
 
-    private CanarySearchIds searchids;
+    private final CanarySearchIds searchids;
+    private final SearchIdsInformation sii;
 
     public SearchCommandListener(CanarySearchIds searchids) throws CommandDependencyException {
         this.searchids = searchids;
         Canary.commands().registerCommands(this, searchids, false);
+        sii = new SearchIdsInformation(searchids);
     }
 
     @Command(aliases = { "search" },
@@ -60,6 +65,31 @@ public class SearchCommandListener implements CommandListener {
             }
             else {
                 System.out.println("Correct usage is: /search [item to search for]");
+            }
+        }
+    }
+
+    @Command(aliases = { "searchids" },
+        description = "SearchIds information command",
+        permissions = { "" },
+        toolTip = "/searchids")
+    public void infomationCommand(MessageReceiver msgrec, String[] cmd) {
+        for (String msg : sii.getAbout()) {
+            if (msg.equals("$VERSION_CHECK$")) {
+                VersionChecker vc = searchids.getVersionChecker();
+                Boolean islatest = vc.isLatest();
+                if (islatest == null) {
+                    msgrec.message(sii.center(Colors.GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
+                }
+                else if (!vc.isLatest()) {
+                    msgrec.message(sii.center(Colors.GRAY + vc.getUpdateAvailibleMessage()));
+                }
+                else {
+                    msgrec.message(sii.center(Colors.LIGHT_GREEN + "Latest Version Installed"));
+                }
+            }
+            else {
+                msgrec.message(msg);
             }
         }
     }

@@ -142,6 +142,7 @@
               <Vendor>Visual Illusions Entertainment</Vendor>
               <Built-By>${user.name}</Built-By>
               <Build-Time>${maven.build.timestamp}</Build-Time>
+              <Class-Path>../lib/viutils-1.0.4.jar</Class-Path>
             </manifestEntries>
           </archive>
         </configuration>

@@ -17,7 +17,9 @@
  */
 package net.visualillusionsent.spout.server.plugin.searchids;
 
+import net.visualillusionsent.searchids.SearchIdsInformation;
 import net.visualillusionsent.searchids.SearchIdsProperties;
+import net.visualillusionsent.utils.VersionChecker;
 import org.spout.api.command.CommandArguments;
 import org.spout.api.command.CommandSource;
 import org.spout.api.command.annotated.Command;
@@ -33,9 +35,11 @@ import org.spout.api.exception.CommandException;
 public class SpoutSearchCommandExecutor {
 
     private final SpoutSearchIds searchids;
+    private final SearchIdsInformation sii;
 
     SpoutSearchCommandExecutor(SpoutSearchIds searchids) {
         this.searchids = searchids;
+        this.sii = new SearchIdsInformation(searchids);
     }
 
     @Command(aliases = { "search" }, usage = "<query>", desc = "Searches.")
@@ -52,6 +56,28 @@ public class SpoutSearchCommandExecutor {
         }
         else {
             source.sendMessage("§cCorrect usage is: /search [item to search for]");
+        }
+    }
+
+    @Command(aliases = { "searchids" }, desc = "SearchIds information command.")
+    public void information(CommandSource source, CommandArguments args) throws CommandException {
+        for (String msg : sii.getAbout()) {
+            if (msg.equals("$VERSION_CHECK$")) {
+                VersionChecker vc = searchids.getVersionChecker();
+                Boolean islatest = vc.isLatest();
+                if (islatest == null) {
+                    source.sendMessage(sii.center("\u00A77VersionCheckerError: " + vc.getErrorMessage()));
+                }
+                else if (!vc.isLatest()) {
+                    source.sendMessage(sii.center("\u00A77" + vc.getUpdateAvailibleMessage()));
+                }
+                else {
+                    source.sendMessage(sii.center("\u00A72Latest Version Installed"));
+                }
+            }
+            else {
+                source.sendMessage(msg);
+            }
         }
     }
 }

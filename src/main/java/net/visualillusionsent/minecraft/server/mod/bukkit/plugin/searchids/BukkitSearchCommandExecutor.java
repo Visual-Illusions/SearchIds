@@ -1,8 +1,11 @@
 package net.visualillusionsent.minecraft.server.mod.bukkit.plugin.searchids;
 
+import net.visualillusionsent.searchids.SearchIdsInformation;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.spout.server.plugin.searchids.SpoutSearchIds;
+import net.visualillusionsent.utils.VersionChecker;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,9 +19,11 @@ import org.bukkit.entity.Player;
 public class BukkitSearchCommandExecutor implements CommandExecutor {
 
     private final BukkitSearchIds searchids;
+    private final SearchIdsInformation sii;
 
     BukkitSearchCommandExecutor(BukkitSearchIds searchids) {
         this.searchids = searchids;
+        this.sii = new SearchIdsInformation(searchids);
     }
 
     @Override
@@ -38,7 +43,26 @@ public class BukkitSearchCommandExecutor implements CommandExecutor {
             }
             return true;
         }
+        else if (label.equals("searchids")) {
+            for (String msg : sii.getAbout()) {
+                if (msg.equals("$VERSION_CHECK$")) {
+                    VersionChecker vc = searchids.getVersionChecker();
+                    Boolean islatest = vc.isLatest();
+                    if (islatest == null) {
+                        sender.sendMessage(sii.center(ChatColor.GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
+                    }
+                    else if (!vc.isLatest()) {
+                        sender.sendMessage(sii.center(ChatColor.GRAY + vc.getUpdateAvailibleMessage()));
+                    }
+                    else {
+                        sender.sendMessage(sii.center(ChatColor.DARK_GREEN + "Latest Version Installed"));
+                    }
+                }
+                else {
+                    sender.sendMessage(msg);
+                }
+            }
+        }
         return false;
     }
-
 }
