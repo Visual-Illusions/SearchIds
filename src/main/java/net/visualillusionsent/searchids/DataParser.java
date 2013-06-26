@@ -55,7 +55,7 @@ public final class DataParser {
             return handler.getResults();
         }
         catch (Exception e) {
-            searchids.warning("An error occurred while getting Results");
+            searchids.warning("An error occurred while getting Results (Corrupt XML File?)");
         }
         return null;
     }

@@ -11,6 +11,9 @@ commands:
     description: Search command
     usage: /search <item|block> - Search item or block
     permission: searchids.search
+  searchids:
+    description: SearchIds information command
+    usages: /searchids
 
 permissions:
   searchids.search:

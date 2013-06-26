@@ -46,8 +46,8 @@ public class BukkitSearchCommandExecutor implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equals("search")) {
-            if (args.length > 1) {
-                String query = StringUtils.join(args, ' ', 1, args.length - 1);
+            if (args.length > 0) {
+                String query = StringUtils.join(args, ' ', 0, args.length - 1);
                 if (sender instanceof Player) {
                     searchids.printSearchResults((Player) sender, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
                 }
