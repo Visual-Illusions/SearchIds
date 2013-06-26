@@ -33,8 +33,9 @@
   </organization>
   <scm>
     <connection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</connection>
-    <url>https://github.com/Visual-Illusions/SearchIds</url>
     <developerConnection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</developerConnection>
+    <tag>HEAD</tag>
+    <url>https://github.com/Visual-Illusions/SearchIds/</url>
   </scm>
   <issueManagement>
    <url>http://github.com/Visual-Illusions/SearchIds/issues</url>
