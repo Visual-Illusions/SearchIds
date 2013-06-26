@@ -1,0 +1,18 @@
+﻿# SearchIds - Bukkit Plugin configuration file
+# Copyright © 2012-2013 Visual Illusions Entertainment
+name: SearchIds
+main: net.visualillusionsent.minecraft.server.mod.bukkit.plugin.searchids.BukkitSearchIds
+version: 3.0
+author: Visual Illusions Entertainment
+website: http://wiki.visualillusionsent.net/SearchIds
+
+commands:
+  search:
+    description: Search command
+    usage: /search <item|block> - Search item or block
+    permission: searchids.search
+
+permissions:
+  searchids.search:
+    description: Gives access to Search
+    default: op

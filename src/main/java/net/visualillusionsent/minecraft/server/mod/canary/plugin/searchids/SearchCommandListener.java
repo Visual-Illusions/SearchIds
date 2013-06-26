@@ -24,7 +24,13 @@ import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.canarymod.commandsys.CommandListener;
 import net.visualillusionsent.searchids.SearchIdsProperties;
+import net.visualillusionsent.utils.StringUtils;
 
+/**
+ * SearchIds Command Listener
+ * 
+ * @author Jason (darkdiplomat)
+ */
 public class SearchCommandListener implements CommandListener {
 
     private CanarySearchIds searchids;
@@ -40,11 +46,7 @@ public class SearchCommandListener implements CommandListener {
         toolTip = "/search <Item|Block name>")
     public void searchCommand(MessageReceiver receiver, String[] cmd) {
         if (cmd.length > 1) {
-            String query = "";
-            for (int i = 1; i < cmd.length; i++) {
-                query = query + cmd[i] + " ";
-            }
-            query = query.trim();
+            String query = StringUtils.joinString(cmd, " ", 1);
             if (receiver instanceof Player) {
                 searchids.printSearchResults((Player) receiver, CanarySearchIds.parser.search(query, SearchIdsProperties.base), query);
             }

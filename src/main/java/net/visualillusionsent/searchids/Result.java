@@ -17,6 +17,12 @@
  */
 package net.visualillusionsent.searchids;
 
+/**
+ * Search Result class
+ * 
+ * @author croemmich
+ * @author Jason (darkdiplomat)
+ */
 public final class Result {
 
     private final String name;

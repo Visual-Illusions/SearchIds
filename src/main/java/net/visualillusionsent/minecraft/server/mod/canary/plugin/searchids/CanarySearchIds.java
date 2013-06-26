@@ -25,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import javax.xml.parsers.ParserConfigurationException;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.canarymod.plugin.Plugin;
@@ -33,8 +34,9 @@ import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIds;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.searchids.UpdateThread;
+import org.xml.sax.SAXException;
 
-public class CanarySearchIds extends Plugin implements SearchIds {
+public final class CanarySearchIds extends Plugin implements SearchIds {
 
     public static DataParser parser;
     private UpdateThread updateThread;
@@ -45,7 +47,11 @@ public class CanarySearchIds extends Plugin implements SearchIds {
             return false;
         }
         if (parser == null) {
-            parser = new DataParser(this);
+            try {
+                parser = new DataParser(this);
+            }
+            catch (ParserConfigurationException ex) {}
+            catch (SAXException ex) {}
         }
         if (!initData()) {
             getLogman().severe("Could not init the search data from: " + SearchIdsProperties.dataXml + ". Please check that the file exists and is not corrupt.");
@@ -127,7 +133,7 @@ public class CanarySearchIds extends Plugin implements SearchIds {
         return true;
     }
 
-    public final void printSearchResults(Player player, ArrayList<Result> results, String query) {
+    final void printSearchResults(Player player, ArrayList<Result> results, String query) {
         if (results != null && !results.isEmpty()) {
             player.message("§bSearch results for \"" + query + "\":");
             Iterator<Result> itr = results.iterator();
@@ -152,7 +158,7 @@ public class CanarySearchIds extends Plugin implements SearchIds {
         }
     }
 
-    public final void printConsoleSearchResults(ArrayList<Result> results, String query) {
+    final void printConsoleSearchResults(ArrayList<Result> results, String query) {
         if (results != null && !results.isEmpty()) {
             System.out.println("Search results for \"" + query + "\":");
             Iterator<Result> itr = results.iterator();

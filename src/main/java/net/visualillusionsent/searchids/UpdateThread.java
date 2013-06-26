@@ -17,6 +17,12 @@
  */
 package net.visualillusionsent.searchids;
 
+/**
+ * Update Thread
+ * 
+ * @author croemmich
+ * @author Jason (darkdiplomat)
+ */
 public final class UpdateThread implements Runnable {
 
     private boolean running = false;

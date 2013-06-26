@@ -6,6 +6,8 @@
 ## About ##
 See the [SearchIds Wiki Page](http://wiki.visualillusionsent.net/SearchIds "wiki_SearchIds") for more information
 
+croemmich is the orignal author of SearchIds (for hMod and Bukkit)
+
 ## Bug Reporting ##
 Please use the [GitHub issue tracker](https://github.com/Visual-Illusions/SearchIds/issues "issues") associated with this repository.<br/>
 Be sure to include as much information about the issue as possible, including Server Mod info

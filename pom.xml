@@ -14,12 +14,12 @@
       <name>GNU General Public License v3</name>
       <url>http://www.gnu.org/licenses/gpl.html</url>
       <comments>
-        PumpkinOnFencePlugin is free software: you can redistribute it and/or modify
+        SearchIds is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
         the Free Software Foundation, either version 3 of the License, or
         (at your option) any later version.
               
-        PumpkinOnFencePlugin is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+        SearchIds is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
         without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
         See the GNU General Public License for more details.
       </comments>
@@ -62,6 +62,16 @@
         <updatePolicy>always</updatePolicy>
       </snapshots>
     </repository>
+    <repository>
+      <id>CodeBukkit</id>
+      <name>Bukkit Public Repository</name>
+      <url>http://repo.bukkit.org/content/groups/public</url>
+    </repository>
+    <repository>
+      <id>spout-repo</id>
+      <name>Spout Public Repository</name>
+      <url>http://nexus.spout.org/content/groups/public/</url>
+    </repository>
   </repositories>
   <dependencies>
    <!-- Mods -->
@@ -69,6 +79,16 @@
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryLib</artifactId>
     <version>0.8-SNAPSHOT</version>
+   </dependency>
+   <dependency>
+    <groupId>org.bukkit</groupId>
+    <artifactId>bukkit</artifactId>
+    <version>1.5.1-R0.2</version>
+   </dependency>
+   <dependency>
+     <groupId>org.spout</groupId>
+     <artifactId>spoutapi</artifactId>
+     <version>dev-SNAPSHOT</version>
    </dependency>
    <!-- Mods End -->
   </dependencies>

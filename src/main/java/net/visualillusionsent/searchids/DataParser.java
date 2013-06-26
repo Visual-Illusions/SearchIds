@@ -19,29 +19,37 @@ package net.visualillusionsent.searchids;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class DataParser {
+/**
+ * Parser class
+ * 
+ * @author croemmich
+ * @author Jason (darkdiplomat)
+ */
+public final class DataParser {
 
     private final SearchIds searchids;
+    private final SAXParser saxParser;
+    private final DataHandler handler;
 
-    public DataParser(SearchIds searchids) {
+    public DataParser(SearchIds searchids) throws ParserConfigurationException, SAXException {
         this.searchids = searchids;
+        saxParser = SAXParserFactory.newInstance().newSAXParser();
+        this.handler = new DataHandler();
     }
 
-    public ArrayList<Result> search(String query) {
+    public final ArrayList<Result> search(String query) {
         return search(query, "decimal");
     }
 
-    public ArrayList<Result> search(String query, String base) {
+    public final ArrayList<Result> search(String query, String base) {
         try {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser saxParser = factory.newSAXParser();
-            DataHandler handler = new DataHandler();
             handler.setPattern(Pattern.compile(".*?" + Pattern.quote(query) + ".*", Pattern.CASE_INSENSITIVE));
             saxParser.parse(SearchIdsProperties.dataXml, handler);
             return handler.getResults();
@@ -52,7 +60,7 @@ public class DataParser {
         return null;
     }
 
-    class DataHandler extends DefaultHandler {
+    final class DataHandler extends DefaultHandler {
 
         boolean data = false;
         boolean blocks = false;
@@ -61,15 +69,15 @@ public class DataParser {
         private Pattern pattern;
         private ArrayList<Result> results = new ArrayList<Result>();
 
-        public void setPattern(Pattern pattern) {
+        public final void setPattern(Pattern pattern) {
             this.pattern = pattern;
         }
 
-        public ArrayList<Result> getResults() {
+        public final ArrayList<Result> getResults() {
             return results;
         }
 
-        public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        public final void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equalsIgnoreCase("DATA")) {
                 data = true;
             }
@@ -110,7 +118,7 @@ public class DataParser {
             }
         }
 
-        public void endElement(String uri, String localName, String qName) throws SAXException {
+        public final void endElement(String uri, String localName, String qName) throws SAXException {
             if (qName.equalsIgnoreCase("DATA")) {
                 data = false;
             }

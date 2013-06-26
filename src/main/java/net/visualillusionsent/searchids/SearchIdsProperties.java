@@ -19,6 +19,11 @@ package net.visualillusionsent.searchids;
 
 import net.visualillusionsent.utils.PropertiesFile;
 
+/**
+ * SearchIds Properties enum
+ * 
+ * @author Jason (darkdiplomat)
+ */
 public enum SearchIdsProperties {
     $;
 

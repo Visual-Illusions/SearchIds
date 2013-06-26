@@ -17,6 +17,11 @@
  */
 package net.visualillusionsent.searchids;
 
+/**
+ * SearchIds interface
+ * 
+ * @author Jason (darkdiplomat)
+ */
 public interface SearchIds {
 
     public boolean updateData(String source);
