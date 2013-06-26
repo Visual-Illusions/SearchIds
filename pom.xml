@@ -91,6 +91,13 @@
      <version>dev-SNAPSHOT</version>
    </dependency>
    <!-- Mods End -->
+   <!-- Libraries -->
+   <dependency>
+     <groupId>net.visualillusionsent</groupId>
+     <artifactId>viutils</artifactId>
+     <version>1.0.4</version>
+   </dependency>
+   <!-- Libraries End -->
   </dependencies>
   <build>
     <plugins>
