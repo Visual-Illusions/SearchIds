@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import net.visualillusionsent.searchids.DataParser;
 import net.visualillusionsent.searchids.Result;
@@ -71,6 +72,9 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
             catch (ParserConfigurationException ex) {}
             catch (SAXException ex) {}
         }
+        if (updateThread == null) {
+            updateThread = new UpdateThread(this);
+        }
         if (!initData()) {
             getLogger().severe("Could not init the search data from: " + SearchIdsProperties.dataXml + ". Please check that the file exists and is not corrupt.");
             if (!SearchIdsProperties.autoUpdate) {
@@ -78,11 +82,7 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
             }
             return;
         }
-
         if (SearchIdsProperties.autoUpdate) {
-            if (updateThread == null) {
-                updateThread = new UpdateThread(this);
-            }
             updateThread.start();
         }
         BukkitSearchCommandExecutor bscex = new BukkitSearchCommandExecutor(this);
@@ -104,8 +104,10 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
         }
 
         File f = new File(SearchIdsProperties.dataXml);
-        if ((!updateData(SearchIdsProperties.updateSource)) && (!f.exists())) {
-            return false;
+        if (!f.exists()) {
+            if (!updateThread.updateData(SearchIdsProperties.updateSource)) {
+                return false;
+            }
         }
 
         return parser.search("test") != null;
@@ -209,6 +211,11 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
     @Override
     public void severe(String msg) {
         getLogger().severe(msg);
+    }
+
+    @Override
+    public void severe(String msg, Throwable thrown) {
+        getLogger().log(Level.SEVERE, msg, thrown);
     }
 
     private final Manifest getManifest() throws Exception {

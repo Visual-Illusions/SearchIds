@@ -17,6 +17,12 @@
  */
 package net.visualillusionsent.searchids;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 /**
  * Update Thread
  * 
@@ -42,9 +48,49 @@ public final class UpdateThread implements Runnable {
                 if (running) { //Only send message if running
                     ids.warning("An Error occured in UpdateThread.");
                 }
+                continue; // Continue the sleep cycle
             }
             if (running) { //Make sure we don't update if not running
-                ids.updateData(SearchIdsProperties.updateSource);
+                updateData(SearchIdsProperties.updateSource);
+            }
+        }
+    }
+
+    public final boolean updateData(String source_url) {
+        try {
+            URL url = new URL(source_url);
+            ids.info("Updating data from " + source_url + "...");
+            InputStream is = url.openStream();
+            FileOutputStream fos = null;
+            fos = new FileOutputStream(SearchIdsProperties.dataXml);
+            int oneChar;
+            while ((oneChar = is.read()) != -1) {
+                fos.write(oneChar);
+            }
+            is.close();
+            fos.close();
+            ids.info("Update Successful!");
+            return true;
+        }
+        catch (MalformedURLException e) {
+            if (source_url.equals(SearchIdsProperties.updateSource)) {
+                ids.warning("Update from " + source_url + " Failed. Attempting Alternate Source...");
+                return updateData(SearchIdsProperties.updateSourceALT);
+            }
+            else {
+                ids.warning("Update from " + source_url + " Failed.");
+                return false;
+            }
+        }
+        catch (IOException ioex) {
+            if (source_url.equals(SearchIdsProperties.updateSource)) {
+                ids.warning("Update from " + source_url + " Failed. Attempting Alternate Source...");
+                return updateData(SearchIdsProperties.updateSourceALT);
+            }
+            else {
+                ids.severe("Could not update search data. (Bad URLs?)", ioex);
+                ioex.printStackTrace();
+                return false;
             }
         }
     }

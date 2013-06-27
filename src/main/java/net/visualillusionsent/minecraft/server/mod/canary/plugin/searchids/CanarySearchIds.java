@@ -18,16 +18,13 @@
 package net.visualillusionsent.minecraft.server.mod.canary.plugin.searchids;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
+import java.util.logging.Level;
 import javax.xml.parsers.ParserConfigurationException;
 import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.commandsys.CommandDependencyException;
@@ -70,6 +67,9 @@ public final class CanarySearchIds extends Plugin implements SearchIds {
             catch (ParserConfigurationException ex) {}
             catch (SAXException ex) {}
         }
+        if (updateThread == null) {
+            updateThread = new UpdateThread(this);
+        }
         if (!initData()) {
             getLogman().severe("Could not init the search data from: " + SearchIdsProperties.dataXml + ". Please check that the file exists and is not corrupt.");
             if (!SearchIdsProperties.autoUpdate) {
@@ -77,14 +77,9 @@ public final class CanarySearchIds extends Plugin implements SearchIds {
             }
             return false;
         }
-
         if (SearchIdsProperties.autoUpdate) {
-            if (updateThread == null) {
-                updateThread = new UpdateThread(this);
-            }
             updateThread.start();
         }
-
         try {
             new SearchCommandListener(this);
         }
@@ -108,46 +103,13 @@ public final class CanarySearchIds extends Plugin implements SearchIds {
         }
 
         File f = new File(SearchIdsProperties.dataXml);
-        if ((!updateData(SearchIdsProperties.updateSource)) && (!f.exists())) {
-            return false;
-        }
-
-        return parser.search("test") != null;
-    }
-
-    public final boolean updateData(String Source) {
-        if (SearchIdsProperties.autoUpdate) {
-            try {
-                URL url = new URL(Source);
-                getLogman().info("Updating data from " + Source + "...");
-                InputStream is = url.openStream();
-                FileOutputStream fos = null;
-                fos = new FileOutputStream(SearchIdsProperties.dataXml);
-                int oneChar;
-                while ((oneChar = is.read()) != -1) {
-                    fos.write(oneChar);
-                }
-                is.close();
-                fos.close();
-                getLogman().info("Update Successful!");
-                return true;
-            }
-            catch (MalformedURLException e) {
-                if (Source.equals(SearchIdsProperties.updateSource)) {
-                    getLogman().warning("Update from " + Source + " Failed. Attempting Alternate Source...");
-                    return updateData(SearchIdsProperties.updateSourceALT);
-                }
-                else {
-                    getLogman().warning("Update from " + Source + " Failed.");
-                    return false;
-                }
-            }
-            catch (IOException e) {
-                getLogman().warning("Could not update search data.");
+        if (!f.exists()) {
+            if (!updateThread.updateData(SearchIdsProperties.updateSource)) {
                 return false;
             }
         }
-        return true;
+
+        return parser.search("test") != null;
     }
 
     final void printSearchResults(Player player, ArrayList<Result> results, String query) {
@@ -213,6 +175,11 @@ public final class CanarySearchIds extends Plugin implements SearchIds {
     @Override
     public void severe(String msg) {
         getLogman().severe(msg);
+    }
+
+    @Override
+    public void severe(String msg, Throwable thrown) {
+        getLogman().log(Level.SEVERE, msg, thrown);
     }
 
     private final Manifest getManifest() throws Exception {

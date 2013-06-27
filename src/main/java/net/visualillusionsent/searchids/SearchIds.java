@@ -24,13 +24,13 @@ package net.visualillusionsent.searchids;
  */
 public interface SearchIds {
 
-    public boolean updateData(String source);
-
     public void info(String msg);
 
     public void warning(String msg);
 
     public void severe(String msg);
+
+    public void severe(String string, Throwable thrown);
 
     public String getName();
 
