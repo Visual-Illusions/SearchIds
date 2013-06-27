@@ -36,12 +36,10 @@ public final class DataParser {
 
     private final SearchIds searchids;
     private final SAXParser saxParser;
-    private final DataHandler handler;
 
     public DataParser(SearchIds searchids) throws ParserConfigurationException, SAXException {
         this.searchids = searchids;
-        saxParser = SAXParserFactory.newInstance().newSAXParser();
-        this.handler = new DataHandler();
+        this.saxParser = SAXParserFactory.newInstance().newSAXParser();
     }
 
     public final ArrayList<Result> search(String query) {
@@ -50,7 +48,7 @@ public final class DataParser {
 
     public final ArrayList<Result> search(String query, String base) {
         try {
-            handler.setPattern(Pattern.compile(".*?" + Pattern.quote(query) + ".*", Pattern.CASE_INSENSITIVE));
+            DataHandler handler = new DataHandler(query);
             saxParser.parse(SearchIdsProperties.dataXml, handler);
             return handler.getResults();
         }
@@ -66,17 +64,19 @@ public final class DataParser {
         boolean blocks = false;
         boolean items = false;
         boolean item = false;
-        private Pattern pattern;
-        private ArrayList<Result> results = new ArrayList<Result>();
+        private final Pattern pattern;
+        private ArrayList<Result> results;
 
-        public final void setPattern(Pattern pattern) {
-            this.pattern = pattern;
+        DataHandler(String query) {
+            this.pattern = Pattern.compile(".*?" + Pattern.quote(query) + ".*", Pattern.CASE_INSENSITIVE);
+            this.results = new ArrayList<Result>();
         }
 
-        public final ArrayList<Result> getResults() {
+        final ArrayList<Result> getResults() {
             return results;
         }
 
+        @Override
         public final void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equalsIgnoreCase("DATA")) {
                 data = true;
@@ -118,6 +118,7 @@ public final class DataParser {
             }
         }
 
+        @Override
         public final void endElement(String uri, String localName, String qName) throws SAXException {
             if (qName.equalsIgnoreCase("DATA")) {
                 data = false;
