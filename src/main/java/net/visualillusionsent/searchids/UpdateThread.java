@@ -88,7 +88,7 @@ public final class UpdateThread implements Runnable {
                 return updateData(SearchIdsProperties.updateSourceALT);
             }
             else {
-                ids.severe("Could not update search data. (Bad URLs?)", ioex);
+                ids.severe("Could not update search data. (Bad URL(s)?)", ioex);
                 ioex.printStackTrace();
                 return false;
             }
