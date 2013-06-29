@@ -2,7 +2,7 @@
 # Copyright © 2012-2013 Visual Illusions Entertainment
 name: SearchIds
 main: net.visualillusionsent.spout.server.plugin.searchids.SpoutSearchIds
-version: 3.1.1
+version: 3.2
 
 description: SearchIds Block/Item ID searching
 author: Visual Illusions Entertainment

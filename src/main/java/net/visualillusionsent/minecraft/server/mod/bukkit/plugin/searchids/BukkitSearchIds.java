@@ -250,17 +250,13 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
             version = Float.parseFloat(mainAttribs.getValue("Version").replace("-SNAPSHOT", ""));
             build = Short.parseShort(mainAttribs.getValue("Build"));
             buildTime = mainAttribs.getValue("Build-Time");
-            try {
-                status = ProgramStatus.valueOf(mainAttribs.getValue("ProgramStatus"));
-            }
-            catch (IllegalArgumentException iaex) {
-                status = ProgramStatus.UNKNOWN;
-            }
+            status = ProgramStatus.valueOf(mainAttribs.getValue("ProgramStatus"));
         }
         catch (Exception ex) {
             version = -1.0F;
             build = -1;
             buildTime = "19700101-0000";
+            status = ProgramStatus.UNKNOWN;
         }
     }
 
