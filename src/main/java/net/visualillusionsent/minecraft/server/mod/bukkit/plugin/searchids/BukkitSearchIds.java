@@ -48,13 +48,18 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
     public static DataParser parser;
     private UpdateThread updateThread;
     private final VersionChecker vc;
-    private float version;
-    private short build;
-    private String buildTime;
-    private ProgramStatus status;
+    private float version = -1.0F;
+    private short build = -1;
+    private String buildTime = "19700101-0000";
+    private ProgramStatus status = ProgramStatus.UNKNOWN;
 
     public BukkitSearchIds() {
-        readManifest();
+        try {
+            readManifest();
+        }
+        catch (Exception ex) {
+            getLogger().warning("Failed to read Manifest properly...");
+        }
         vc = new VersionChecker(getPluginName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
     }
 
@@ -243,21 +248,13 @@ public final class BukkitSearchIds extends JavaPlugin implements SearchIds {
         return toRet;
     }
 
-    private final void readManifest() {
-        try {
-            Manifest manifest = getManifest();
-            Attributes mainAttribs = manifest.getMainAttributes();
-            version = Float.parseFloat(mainAttribs.getValue("Version").replace("-SNAPSHOT", ""));
-            build = Short.parseShort(mainAttribs.getValue("Build"));
-            buildTime = mainAttribs.getValue("Build-Time");
-            status = ProgramStatus.valueOf(mainAttribs.getValue("ProgramStatus"));
-        }
-        catch (Exception ex) {
-            version = -1.0F;
-            build = -1;
-            buildTime = "19700101-0000";
-            status = ProgramStatus.UNKNOWN;
-        }
+    private final void readManifest() throws Exception {
+        Manifest manifest = getManifest();
+        Attributes mainAttribs = manifest.getMainAttributes();
+        version = Float.parseFloat(mainAttribs.getValue("Version").replace("-SNAPSHOT", ""));
+        build = Short.parseShort(mainAttribs.getValue("Build"));
+        buildTime = mainAttribs.getValue("Build-Time");
+        status = ProgramStatus.valueOf(mainAttribs.getValue("ProgramStatus"));
     }
 
     private final void checkStatus() {

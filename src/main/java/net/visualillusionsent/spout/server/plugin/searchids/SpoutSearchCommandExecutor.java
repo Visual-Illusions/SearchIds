@@ -22,7 +22,7 @@ import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.VersionChecker;
 import org.spout.api.command.CommandArguments;
 import org.spout.api.command.CommandSource;
-import org.spout.api.command.annotated.Command;
+import org.spout.api.command.annotated.CommandDescription;
 import org.spout.api.command.annotated.Permissible;
 import org.spout.api.entity.Player;
 import org.spout.api.exception.CommandException;
@@ -42,11 +42,11 @@ public class SpoutSearchCommandExecutor {
         this.sii = new SearchIdsInformation(searchids);
     }
 
-    @Command(aliases = { "search" }, usage = "<query>", desc = "Searches.")
+    @CommandDescription(aliases = { "search" }, usage = "<query>", desc = "Searches.")
     @Permissible("searchids.search")
     public void search(CommandSource source, CommandArguments args) throws CommandException {
         if (args.length() > 0) {
-            String query = args.getJoinedString(0).trim();
+            String query = args.toString();
             if (source instanceof Player) {
                 searchids.printSearchResults((Player) source, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
             }
@@ -59,7 +59,7 @@ public class SpoutSearchCommandExecutor {
         }
     }
 
-    @Command(aliases = { "searchids" }, desc = "SearchIds information command.")
+    @CommandDescription(aliases = { "searchids" }, desc = "SearchIds information command.")
     public void information(CommandSource source, CommandArguments args) throws CommandException {
         for (String msg : sii.getAbout()) {
             if (msg.equals("$VERSION_CHECK$")) {

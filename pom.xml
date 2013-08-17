@@ -7,6 +7,8 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <ProgramStatus>STABLE</ProgramStatus>
+    <canary.version>0.9-SNAPSHOT</canary.version>
+    <bukkit.version>1.5.2-R1.0</bukkit.version>
   </properties>
   <description>Block/Item ID (decimal/hexadecimal) searches</description>
   <licenses>
@@ -79,12 +81,12 @@
    <dependency>
     <groupId>net.canarymod</groupId>
     <artifactId>CanaryLib</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>${canary.version}</version>
    </dependency>
    <dependency>
     <groupId>org.bukkit</groupId>
     <artifactId>bukkit</artifactId>
-    <version>1.5.1-R0.2</version>
+    <version>${bukkit.version}</version>
    </dependency>
    <dependency>
      <groupId>org.spout</groupId>
