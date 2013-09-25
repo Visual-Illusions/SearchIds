@@ -85,6 +85,19 @@
             <name>Spout Public Repository</name>
             <url>http://nexus.spout.org/content/groups/public/</url>
         </repository>
+        <!-- Vanilla is in the Sonatype repo -->
+        <repository>
+            <id>sonatype-nexus-releases</id>
+            <url>https://oss.sonatype.org/content/repositories/releases</url>
+        </repository>
+        <repository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
     </repositories>
     <dependencies>
         <!-- Mods -->
