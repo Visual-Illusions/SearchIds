@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.visualillusionsent</groupId>
     <artifactId>SearchIds</artifactId>
-    <version>3.2-SNAPSHOT</version>
+    <version>3.2</version>
     <name>SearchIds</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <program.status>STABLE</program.status>
+        <program.status>BETA</program.status>
         <canary.version>1.0-RC-2</canary.version>
         <bukkit.version>1.6.2-R1.0</bukkit.version>
         <spout.version>dev-SNAPSHOT</spout.version>
@@ -118,6 +118,7 @@
         <!-- Libraries End -->
     </dependencies>
     <build>
+        <finalName>${project.name}-${project.version}-${program.status}-b${build.number}</finalName>
         <plugins>
             <!-- Update Plugin/Mod Description Files -->
             <plugin>
