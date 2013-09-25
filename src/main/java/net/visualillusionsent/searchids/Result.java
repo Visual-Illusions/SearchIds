@@ -19,7 +19,7 @@ package net.visualillusionsent.searchids;
 
 /**
  * Search Result class
- * 
+ *
  * @author croemmich
  * @author Jason (darkdiplomat)
  */

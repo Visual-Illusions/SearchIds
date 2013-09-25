@@ -17,18 +17,19 @@
  */
 package net.visualillusionsent.searchids;
 
-import java.util.ArrayList;
-import java.util.regex.Pattern;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
+
 /**
  * Parser class
- * 
+ *
  * @author croemmich
  * @author Jason (darkdiplomat)
  */
@@ -94,8 +95,8 @@ public final class DataParser {
                 item = true;
 
                 if (SearchIdsProperties.searchType.equalsIgnoreCase("all") ||
-                    (SearchIdsProperties.searchType.equalsIgnoreCase("blocks") && blocks == true) ||
-                    (SearchIdsProperties.searchType.equalsIgnoreCase("items") && items == true)) {
+                        (SearchIdsProperties.searchType.equalsIgnoreCase("blocks") && blocks == true) ||
+                        (SearchIdsProperties.searchType.equalsIgnoreCase("items") && items == true)) {
 
                     String name = attributes.getValue("name");
                     String value = attributes.getValue("dec");

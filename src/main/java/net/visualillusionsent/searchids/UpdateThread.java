@@ -25,7 +25,7 @@ import java.net.URL;
 
 /**
  * Update Thread
- * 
+ *
  * @author croemmich
  * @author Jason (darkdiplomat)
  */

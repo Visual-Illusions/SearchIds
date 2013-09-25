@@ -21,7 +21,7 @@ import net.visualillusionsent.utils.PropertiesFile;
 
 /**
  * SearchIds Properties enum
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public enum SearchIdsProperties {
@@ -42,7 +42,8 @@ public enum SearchIdsProperties {
     public static String delimiter = "-";
     public static int autoUpdateInterval = 600000;
 
-    private SearchIdsProperties() {}
+    private SearchIdsProperties() {
+    }
 
     public static boolean initProps() {
         if ($.init) {

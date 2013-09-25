@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License along with SearchIds.
  * If not, see http://www.gnu.org/licenses/gpl.html.
  */
-package net.visualillusionsent.spout.server.plugin.searchids;
+package net.visualillusionsent.searchids.spout;
 
-import net.visualillusionsent.searchids.SearchIdsInformation;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.VersionChecker;
 import org.spout.api.command.CommandArguments;
@@ -26,29 +25,29 @@ import org.spout.api.command.annotated.CommandDescription;
 import org.spout.api.command.annotated.Permissible;
 import org.spout.api.entity.Player;
 import org.spout.api.exception.CommandException;
+import org.spout.vanilla.ChatStyle;
 
 /**
  * Command Executor for Spout
- * 
+ *
  * @author Jason (darkdiplomat)
  */
-public class SpoutSearchCommandExecutor {
+public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInformationCommand {
 
     private final SpoutSearchIds searchids;
-    private final SearchIdsInformation sii;
 
     SpoutSearchCommandExecutor(SpoutSearchIds searchids) {
+        super(searchids);
         this.searchids = searchids;
-        this.sii = new SearchIdsInformation(searchids);
     }
 
-    @CommandDescription(aliases = { "search" }, usage = "<query>", desc = "Searches.")
+    @CommandDescription(aliases = {"search"}, usage = "<query>", desc = "Searches.")
     @Permissible("searchids.search")
     public void search(CommandSource source, CommandArguments args) throws CommandException {
         if (args.length() > 0) {
             String query = args.toString();
             if (source instanceof Player) {
-                searchids.printSearchResults((Player) source, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
+                searchids.printSearchResults((Player)source, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
             }
             else {
                 searchids.printConsoleSearchResults(SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
@@ -59,20 +58,20 @@ public class SpoutSearchCommandExecutor {
         }
     }
 
-    @CommandDescription(aliases = { "searchids" }, desc = "SearchIds information command.")
+    @CommandDescription(aliases = {"searchids"}, desc = "SearchIds information command.")
     public void information(CommandSource source, CommandArguments args) throws CommandException {
-        for (String msg : sii.getAbout()) {
+        for (String msg : about) {
             if (msg.equals("$VERSION_CHECK$")) {
-                VersionChecker vc = searchids.getVersionChecker();
+                VersionChecker vc = plugin.getVersionChecker();
                 Boolean islatest = vc.isLatest();
                 if (islatest == null) {
-                    source.sendMessage(sii.center("\u00A77VersionCheckerError: " + vc.getErrorMessage()));
+                    source.sendMessage(center(ChatStyle.DARK_GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
                 }
-                else if (!vc.isLatest()) {
-                    source.sendMessage(sii.center("\u00A77" + vc.getUpdateAvailibleMessage()));
+                else if (!islatest) {
+                    source.sendMessage(center(ChatStyle.DARK_GRAY + vc.getUpdateAvailibleMessage()));
                 }
                 else {
-                    source.sendMessage(sii.center("\u00A72Latest Version Installed"));
+                    source.sendMessage(center(ChatStyle.GREEN + "Latest Version Installed"));
                 }
             }
             else {

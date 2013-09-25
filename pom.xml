@@ -1,214 +1,251 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>net.visualillusionsent</groupId>
-  <artifactId>SearchIds</artifactId>
-  <version>3.2-SNAPSHOT</version>
-  <name>SearchIds</name>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <ProgramStatus>STABLE</ProgramStatus>
-    <canary.version>0.9-SNAPSHOT</canary.version>
-    <bukkit.version>1.5.2-R1.0</bukkit.version>
-  </properties>
-  <description>Block/Item ID (decimal/hexadecimal) searches</description>
-  <licenses>
-    <license>
-      <name>GNU General Public License v3</name>
-      <url>http://www.gnu.org/licenses/gpl.html</url>
-      <comments>
-        SearchIds is free software: you can redistribute it and/or modify
-        it under the terms of the GNU General Public License as published by
-        the Free Software Foundation, either version 3 of the License, or
-        (at your option) any later version.
-              
-        SearchIds is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
-        without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-        See the GNU General Public License for more details.
-      </comments>
-    </license>
-  </licenses>
-  <url>http://wiki.visualillusionsent.net/SearchIds/</url>
-  <inceptionYear>2012</inceptionYear>
-  <organization>
-   <name>Visual Illusions Entertainment</name>
-   <url>http://visualillusionsent.net</url>
-  </organization>
-  <scm>
-    <connection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</connection>
-    <developerConnection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</developerConnection>
-    <tag>HEAD</tag>
-    <url>https://github.com/Visual-Illusions/SearchIds/</url>
-  </scm>
-  <issueManagement>
-   <url>http://github.com/Visual-Illusions/SearchIds/issues</url>
-   <system>GitHub Issues Tracker</system>
-  </issueManagement>
-  <ciManagement>
-   <url>http://ci.visualillusionsent.net/job/SearchIds</url>
-   <system>Jenkins</system>
-  </ciManagement>
-  <distributionManagement>
-    <repository>
-      <id>vi-repo</id>
-      <url>ftp://repo.visualillusionsent.net/</url>
-    </repository>
-  </distributionManagement>
-  <repositories>
-    <repository>
-      <id>vi-repo</id>
-      <name>Visual Illusions Repository</name>
-      <url>http://repo.visualillusionsent.net/</url>
-      <releases>
-        <updatePolicy>always</updatePolicy>
-      </releases>
-      <snapshots>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>CodeBukkit</id>
-      <name>Bukkit Public Repository</name>
-      <url>http://repo.bukkit.org/content/groups/public</url>
-    </repository>
-    <repository>
-      <id>spout-repo</id>
-      <name>Spout Public Repository</name>
-      <url>http://nexus.spout.org/content/groups/public/</url>
-    </repository>
-  </repositories>
-  <dependencies>
-   <!-- Mods -->
-   <dependency>
-    <groupId>net.canarymod</groupId>
-    <artifactId>CanaryLib</artifactId>
-    <version>${canary.version}</version>
-   </dependency>
-   <dependency>
-    <groupId>org.bukkit</groupId>
-    <artifactId>bukkit</artifactId>
-    <version>${bukkit.version}</version>
-   </dependency>
-   <dependency>
-     <groupId>org.spout</groupId>
-     <artifactId>spoutapi</artifactId>
-     <version>dev-SNAPSHOT</version>
-   </dependency>
-   <!-- Mods End -->
-   <!-- Libraries -->
-   <dependency>
-     <groupId>net.visualillusionsent</groupId>
-     <artifactId>viutils</artifactId>
-     <version>1.0.4</version>
-   </dependency>
-   <!-- Libraries End -->
-  </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>buildnumber-maven-plugin</artifactId>
-        <version>1.2</version>
-        <executions>
-          <execution>
-            <phase>validate</phase>
-            <goals>
-              <goal>create</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <doCheck>false</doCheck>
-          <doUpdate>false</doUpdate>
-          <format>{0,number}</format>
-          <items>
-            <item>buildNumber0</item>
-          </items>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.3.2</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>2.4</version>
-        <configuration>
-          <archive>
-            <addMavenDescriptor>false</addMavenDescriptor>
-            <manifest>
-              <addClasspath>false</addClasspath>
-            </manifest>
-            <manifestEntries>
-              <Title>${project.name}</Title>
-              <Version>${project.version}</Version>
-              <Build>${buildNumber}</Build>
-              <ProgramStatus>${ProgramStatus}</ProgramStatus>
-              <Vendor>Visual Illusions Entertainment</Vendor>
-              <Built-By>${user.name}</Built-By>
-              <Build-Time>${maven.build.timestamp}</Build-Time>
-              <Class-Path>../lib/viutils-1.0.4.jar</Class-Path>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>com.mycila.maven-license-plugin</groupId>
-        <artifactId>maven-license-plugin</artifactId>
-        <version>1.10.b1</version>
-        <executions>
-          <execution>
-            <phase>clean</phase>
-            <goals>
-              <goal>format</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <quiet>false</quiet>
-          <encoding>UTF-8</encoding>
-          <strictCheck>true</strictCheck>
-          <header>${basedir}/HEADER_GPL.txt</header>
-          <keywords>
-            <keyword>${project.name}</keyword>
-            <keyword>license</keyword>
-          </keywords>
-          <mapping>
-            <java>SLASHSTAR_STYLE</java>
-          </mapping>
-          <properties>
-            <name>${project.name}</name>
-            <copyright>Copyright © ${project.inceptionYear}-2013 Visual Illusions Entertainment</copyright>
-           </properties>
-           <includes>
-            <include>src/main/java/**</include>
-          </includes>
-        </configuration>
-      </plugin>
-      <!-- Release -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>2.2.2</version>
-        <configuration>
-          <preparationGoals>jar:jar</preparationGoals>
-          <goals>jar:jar</goals>
-          <tagNameFormat>@{project.version}</tagNameFormat>
-        </configuration>
-      </plugin>
-    </plugins>
-    <extensions>
-      <!-- FTP Extension to upload to repo.visualillusionsent.net -->
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ftp</artifactId>
-        <version>2.4</version>
-      </extension>
-    </extensions>
-  </build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>net.visualillusionsent</groupId>
+    <artifactId>SearchIds</artifactId>
+    <version>3.2-SNAPSHOT</version>
+    <name>SearchIds</name>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <ProgramStatus>STABLE</ProgramStatus>
+        <canary.version>1.0-RC-2</canary.version>
+        <bukkit.version>1.6.2-R1.0</bukkit.version>
+        <spout.version>dev-SNAPSHOT</spout.version>
+        <spout.vanilla.version>1.6.2-SNAPSHOT</spout.vanilla.version>
+        <build.number>0-dev</build.number>
+        <version.check.url>http://visualillusionsent.net/minecraft/plugins/</version.check.url>
+        <devs>darkdiplomat</devs>
+    </properties>
+    <description>Block/Item ID (decimal/hexadecimal) searches</description>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3</name>
+            <url>http://www.gnu.org/licenses/gpl.html</url>
+            <comments>
+                SearchIds is free software: you can redistribute it and/or modify
+                it under the terms of the GNU General Public License as published by
+                the Free Software Foundation, either version 3 of the License, or
+                (at your option) any later version.
+
+                SearchIds is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+                without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+                See the GNU General Public License for more details.
+            </comments>
+        </license>
+    </licenses>
+    <url>http://wiki.visualillusionsent.net/SearchIds/</url>
+    <inceptionYear>2012</inceptionYear>
+    <organization>
+        <name>Visual Illusions Entertainment</name>
+        <url>http://visualillusionsent.net</url>
+    </organization>
+    <scm>
+        <connection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</connection>
+        <developerConnection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/Visual-Illusions/SearchIds/</url>
+    </scm>
+    <issueManagement>
+        <url>http://github.com/Visual-Illusions/SearchIds/issues</url>
+        <system>GitHub Issues Tracker</system>
+    </issueManagement>
+    <ciManagement>
+        <url>http://ci.visualillusionsent.net/job/SearchIds</url>
+        <system>Jenkins</system>
+    </ciManagement>
+    <distributionManagement>
+        <repository>
+            <id>vi-repo</id>
+            <url>ftp://repo.visualillusionsent.net/</url>
+        </repository>
+    </distributionManagement>
+    <repositories>
+        <repository>
+            <id>vi-repo</id>
+            <name>Visual Illusions Repository</name>
+            <url>http://repo.visualillusionsent.net/</url>
+            <releases>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>CodeBukkit</id>
+            <name>Bukkit Public Repository</name>
+            <url>http://repo.bukkit.org/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>spout-repo</id>
+            <name>Spout Public Repository</name>
+            <url>http://nexus.spout.org/content/groups/public/</url>
+        </repository>
+    </repositories>
+    <dependencies>
+        <!-- Mods -->
+        <dependency>
+            <groupId>net.canarymod</groupId>
+            <artifactId>CanaryLib</artifactId>
+            <version>${canary.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>${bukkit.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spout</groupId>
+            <artifactId>spoutapi</artifactId>
+            <version>${spout.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.spout</groupId>
+            <artifactId>vanilla</artifactId>
+            <version>${spout.vanilla.version}</version>
+        </dependency>
+        <!-- Mods End -->
+        <!-- Libraries -->
+        <dependency>
+            <groupId>net.visualillusionsent</groupId>
+            <artifactId>viutils</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+        <!-- Libraries End -->
+    </dependencies>
+    <build>
+        <plugins>
+            <!-- Update Canary.inf -->
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.2</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includes>
+                        <include>target/**/*.inf</include>
+                        <include>target/**/*.yml</include>
+                    </includes>
+                    <replacements>
+                        <replacement>
+                            <token>$plugin.version$</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                        <replacement>
+                            <token>$wiki$</token>
+                            <value>${project.url}</value>
+                        </replacement>
+                        <replacement>
+                            <token>$issues$</token>
+                            <value>${project.issueManagement.url}</value>
+                        </replacement>
+                        <replace>
+                            <token>$version.check.url$</token>
+                            <value>${version.check.url}</value>
+                        </replace>
+                        <replace>
+                            <token>$program.status$</token>
+                            <value>${program.status}</value>
+                        </replace>
+                        <replace>
+                            <token>$build$</token>
+                            <value>${build.number}</value>
+                        </replace>
+                        <replace>
+                            <token>$build.time$</token>
+                            <value>${maven.build.timestamp}</value>
+                        </replace>
+                        <replace>
+                            <token>$devs$</token>
+                            <value>${devs}</value>
+                        </replace>
+                    </replacements>
+                    <regex>false</regex>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <addMavenDescriptor>false</addMavenDescriptor>
+                        <manifest>
+                            <addClasspath>false</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Title>${project.name}</Title>
+                            <Version>${project.version}</Version>
+                            <Build>${buildNumber}</Build>
+                            <ProgramStatus>${ProgramStatus}</ProgramStatus>
+                            <Vendor>Visual Illusions Entertainment</Vendor>
+                            <Built-By>${user.name}</Built-By>
+                            <Build-Time>${maven.build.timestamp}</Build-Time>
+                            <Class-Path>../lib/viutils-1.1.1.jar</Class-Path>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <version>1.10.b1</version>
+                <executions>
+                    <execution>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>format</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <quiet>false</quiet>
+                    <encoding>UTF-8</encoding>
+                    <strictCheck>true</strictCheck>
+                    <header>${basedir}/HEADER_GPL.txt</header>
+                    <keywords>
+                        <keyword>${project.name}</keyword>
+                        <keyword>license</keyword>
+                    </keywords>
+                    <mapping>
+                        <java>SLASHSTAR_STYLE</java>
+                    </mapping>
+                    <properties>
+                        <name>${project.name}</name>
+                        <copyright>Copyright © ${project.inceptionYear}-2013 Visual Illusions Entertainment</copyright>
+                    </properties>
+                    <includes>
+                        <include>src/main/java/**</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <!-- Release -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.2.2</version>
+                <configuration>
+                    <preparationGoals>jar:jar</preparationGoals>
+                    <goals>jar:jar</goals>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

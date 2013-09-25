@@ -15,19 +15,8 @@
  * You should have received a copy of the GNU General Public License along with SearchIds.
  * If not, see http://www.gnu.org/licenses/gpl.html.
  */
-package net.visualillusionsent.spout.server.plugin.searchids;
+package net.visualillusionsent.searchids.spout;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.CodeSource;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.logging.Level;
-import javax.xml.parsers.ParserConfigurationException;
 import net.visualillusionsent.searchids.DataParser;
 import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIds;
@@ -40,27 +29,44 @@ import org.spout.api.entity.Player;
 import org.spout.api.plugin.Plugin;
 import org.xml.sax.SAXException;
 
-public final class SpoutSearchIds extends Plugin implements SearchIds {
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.security.CodeSource;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.jar.Attributes;
+import java.util.jar.JarFile;
+import java.util.jar.Manifest;
+import java.util.logging.Level;
+
+public final class SpoutSearchIds extends VisualIllusionsSpoutPlugin implements SearchIds {
 
     public static DataParser parser;
     private UpdateThread updateThread;
-    private final VersionChecker vc;
-    private float version = -1.0F;
-    private short build = -1;
-    private String buildTime = "19700101-0000";
-    private ProgramStatus status = ProgramStatus.UNKNOWN;
 
     public SpoutSearchIds() {
-        try {
-            readManifest();
+        File viutilslib = new File("lib/viutils-1.1.1.jar");
+        if (!viutilslib.exists()) {
+            try {
+                URL website = new URL("http://repo.visualillusionsent.net/net/visualillusionsent/viutils/1.1.1/viutils-1.1.1.jar");
+                ReadableByteChannel rbc = Channels.newChannel(website.openStream());
+                FileOutputStream fos = new FileOutputStream("lib/viutils-1.1.1.jar");
+                fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            }
+            catch (Exception ex) {
+                System.out.println("Failed to download VIUtils 1.1.1");
+            }
         }
-        catch (Exception ex) {
-            getLogger().warning("Failed to read Manifest properly...");
-        }
-        vc = new VersionChecker(getPluginName(), String.valueOf(version), String.valueOf(build), "http://visualillusionsent.net/minecraft/plugins/", status, false);
     }
 
     public final void onEnable() {
+        initialize();
         checkStatus();
         checkVersion();
         if (!SearchIdsProperties.initProps()) {
@@ -71,8 +77,10 @@ public final class SpoutSearchIds extends Plugin implements SearchIds {
             try {
                 parser = new DataParser(this);
             }
-            catch (ParserConfigurationException ex) {}
-            catch (SAXException ex) {}
+            catch (ParserConfigurationException ex) {
+            }
+            catch (SAXException ex) {
+            }
         }
 
         if (updateThread == null) {
@@ -186,88 +194,13 @@ public final class SpoutSearchIds extends Plugin implements SearchIds {
         getLogger().log(Level.SEVERE, msg, thrown);
     }
 
-    private final Manifest getManifest() throws Exception {
-        Manifest toRet = null;
-        Exception ex = null;
-        JarFile jar = null;
-        try {
-            jar = new JarFile(getJarPath());
-            toRet = jar.getManifest();
-        }
-        catch (Exception e) {
-            ex = e;
-        }
-        finally {
-            if (jar != null) {
-                try {
-                    jar.close();
-                }
-                catch (IOException e) {}
-            }
-            if (ex != null) {
-                throw ex;
-            }
-        }
-        return toRet;
-    }
-
-    private final void readManifest() throws Exception {
-        Manifest manifest = getManifest();
-        Attributes mainAttribs = manifest.getMainAttributes();
-        version = Float.parseFloat(mainAttribs.getValue("Version").replace("-SNAPSHOT", ""));
-        build = Short.parseShort(mainAttribs.getValue("Build"));
-        buildTime = mainAttribs.getValue("Build-Time");
-        status = ProgramStatus.valueOf(mainAttribs.getValue("ProgramStatus"));
-    }
-
-    private final void checkStatus() {
-        if (status == ProgramStatus.UNKNOWN) {
-            getLogger().severe(String.format("%s has declared itself as an 'UNKNOWN STATUS' build. Use is not advised and could cause damage to your system!", getName()));
-        }
-        else if (status == ProgramStatus.ALPHA) {
-            getLogger().warning(String.format("%s has declared itself as a 'ALPHA' build. Production use is not advised!", getName()));
-        }
-        else if (status == ProgramStatus.BETA) {
-            getLogger().warning(String.format("%s has declared itself as a 'BETA' build. Production use is not advised!", getName()));
-        }
-        else if (status == ProgramStatus.RELEASE_CANDIDATE) {
-            getLogger().info(String.format("%s has declared itself as a 'Release Candidate' build. Expect some bugs.", getName()));
-        }
-    }
-
-    private final void checkVersion() {
-        Boolean islatest = vc.isLatest();
-        if (islatest == null) {
-            getLogger().warning("VersionCheckerError: " + vc.getErrorMessage());
-        }
-        else if (!vc.isLatest()) {
-            getLogger().warning(vc.getUpdateAvailibleMessage());
-            getLogger().warning(String.format("You can view update info @ http://wiki.visualillusionsent.net/%s#ChangeLog", getName()));
-        }
-    }
-
-    public final float getRawVersion() {
-        return version;
-    }
-
-    public final short getBuildNumber() {
-        return build;
-    }
-
-    public final String getBuildTime() {
-        return buildTime;
-    }
-
-    public final VersionChecker getVersionChecker() {
-        return vc;
-    }
-
     private final String getJarPath() {
         try {
             CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
             return codeSource.getLocation().toURI().getPath();
         }
-        catch (URISyntaxException ex) {}
+        catch (URISyntaxException ex) {
+        }
         return "plugins/SearchIds.jar";
     }
 

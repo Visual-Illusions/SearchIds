@@ -15,32 +15,28 @@
  * You should have received a copy of the GNU General Public License along with SearchIds.
  * If not, see http://www.gnu.org/licenses/gpl.html.
  */
-package net.visualillusionsent.minecraft.server.mod.bukkit.plugin.searchids;
+package net.visualillusionsent.searchids.bukkit;
 
-import net.visualillusionsent.searchids.SearchIdsInformation;
 import net.visualillusionsent.searchids.SearchIdsProperties;
-import net.visualillusionsent.spout.server.plugin.searchids.SpoutSearchIds;
 import net.visualillusionsent.utils.VersionChecker;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
  * Command Executor for Bukkit
- * 
+ *
  * @author Jason (darkdiplomat)
  */
-public class BukkitSearchCommandExecutor implements CommandExecutor {
+public class BukkitSearchCommandExecutor extends VisualIllusionsBukkitPluginInformationCommand {
 
     private final BukkitSearchIds searchids;
-    private final SearchIdsInformation sii;
 
     BukkitSearchCommandExecutor(BukkitSearchIds searchids) {
+        super(searchids);
         this.searchids = searchids;
-        this.sii = new SearchIdsInformation(searchids);
     }
 
     @Override
@@ -49,10 +45,10 @@ public class BukkitSearchCommandExecutor implements CommandExecutor {
             if (args.length > 0) {
                 String query = StringUtils.join(args, ' ', 0, args.length - 1);
                 if (sender instanceof Player) {
-                    searchids.printSearchResults((Player) sender, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
+                    searchids.printSearchResults((Player)sender, BukkitSearchIds.parser.search(query, SearchIdsProperties.base), query);
                 }
                 else {
-                    searchids.printConsoleSearchResults(SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
+                    searchids.printConsoleSearchResults(BukkitSearchIds.parser.search(query, SearchIdsProperties.base), query);
                 }
             }
             else {
@@ -61,18 +57,18 @@ public class BukkitSearchCommandExecutor implements CommandExecutor {
             return true;
         }
         else if (label.equals("searchids")) {
-            for (String msg : sii.getAbout()) {
+            for (String msg : about) {
                 if (msg.equals("$VERSION_CHECK$")) {
-                    VersionChecker vc = searchids.getVersionChecker();
+                    VersionChecker vc = plugin.getVersionChecker();
                     Boolean islatest = vc.isLatest();
                     if (islatest == null) {
-                        sender.sendMessage(sii.center(ChatColor.GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
+                        sender.sendMessage(center(ChatColor.DARK_GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
                     }
-                    else if (!vc.isLatest()) {
-                        sender.sendMessage(sii.center(ChatColor.GRAY + vc.getUpdateAvailibleMessage()));
+                    else if (!islatest) {
+                        sender.sendMessage(center(ChatColor.DARK_GRAY + vc.getUpdateAvailibleMessage()));
                     }
                     else {
-                        sender.sendMessage(sii.center(ChatColor.DARK_GREEN + "Latest Version Installed"));
+                        sender.sendMessage(center(ChatColor.GREEN + "Latest Version Installed"));
                     }
                 }
                 else {

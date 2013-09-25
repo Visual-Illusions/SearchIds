@@ -19,7 +19,7 @@ package net.visualillusionsent.searchids;
 
 /**
  * SearchIds interface
- * 
+ *
  * @author Jason (darkdiplomat)
  */
 public interface SearchIds {
@@ -31,13 +31,5 @@ public interface SearchIds {
     public void severe(String msg);
 
     public void severe(String string, Throwable thrown);
-
-    public String getName();
-
-    public float getRawVersion();
-
-    public short getBuildNumber();
-
-    public String getBuildTime();
 
 }
