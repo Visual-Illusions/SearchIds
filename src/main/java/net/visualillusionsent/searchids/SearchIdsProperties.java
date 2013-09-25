@@ -63,10 +63,10 @@ public enum SearchIdsProperties {
         delimiter = $.props.getString("delimiter", delimiter);
         if (autoUpdateInterval < 60000) {
             autoUpdateInterval = 60000;
-            //log.warning("[SearchIds] auto-update-interval cannot be less than 60000! auto-update-interval set to 60000");
+            //ids.warning("[SearchIds] auto-update-interval cannot be less than 60000! auto-update-interval set to 60000");
         }
         $.props.save();
-        return $.props != null;
+        return true;
     }
 
     public static String leftPad(String s, int width) {

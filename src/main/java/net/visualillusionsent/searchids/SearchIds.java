@@ -24,6 +24,8 @@ package net.visualillusionsent.searchids;
  */
 public interface SearchIds {
 
+    public static String viutils_version = "1.1.1"; // For Bukkit/Spout
+
     public void info(String msg);
 
     public void warning(String msg);

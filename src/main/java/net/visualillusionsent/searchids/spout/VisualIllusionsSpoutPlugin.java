@@ -107,7 +107,7 @@ public abstract class VisualIllusionsSpoutPlugin extends Plugin {
         return getPluginYML().getChild("developers").getString("missing.developers");
     }
 
-    private final YamlConfiguration getPluginYML() {
+    private YamlConfiguration getPluginYML() {
         if (pluginyml == null) {
             try {
                 JarFile jfile = new JarFile(getJarPath());
@@ -122,7 +122,7 @@ public abstract class VisualIllusionsSpoutPlugin extends Plugin {
         return this.pluginyml;
     }
 
-    private final String getJarPath() { // For when the jar isn't SearchIds.jar
+    private String getJarPath() { // For when the jar isn't SearchIds.jar
         try {
             CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
             return codeSource.getLocation().toURI().getPath();

@@ -17,8 +17,10 @@
  */
 package net.visualillusionsent.searchids.spout;
 
+import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.VersionChecker;
+import org.spout.api.Server;
 import org.spout.api.command.CommandArguments;
 import org.spout.api.command.CommandSource;
 import org.spout.api.command.annotated.CommandDescription;
@@ -26,6 +28,9 @@ import org.spout.api.command.annotated.Permissible;
 import org.spout.api.entity.Player;
 import org.spout.api.exception.CommandException;
 import org.spout.vanilla.ChatStyle;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Command Executor for Spout
@@ -45,13 +50,7 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
     @Permissible("searchids.search")
     public void search(CommandSource source, CommandArguments args) throws CommandException {
         if (args.length() > 0) {
-            String query = args.toString();
-            if (source instanceof Player) {
-                searchids.printSearchResults((Player)source, SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
-            }
-            else {
-                searchids.printConsoleSearchResults(SpoutSearchIds.parser.search(query, SearchIdsProperties.base), query);
-            }
+            printSearchResults(source, searchids.getParser().search(args.toString(), SearchIdsProperties.base), args.toString());
         }
         else {
             source.sendMessage("§cCorrect usage is: /search [item to search for]");
@@ -65,18 +64,43 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
                 VersionChecker vc = plugin.getVersionChecker();
                 Boolean islatest = vc.isLatest();
                 if (islatest == null) {
-                    source.sendMessage(center(ChatStyle.DARK_GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
+                    source.sendMessage(center(ChatStyle.DARK_GRAY.toString().concat("VersionCheckerError: ").concat(vc.getErrorMessage())));
                 }
                 else if (!islatest) {
-                    source.sendMessage(center(ChatStyle.DARK_GRAY + vc.getUpdateAvailibleMessage()));
+                    source.sendMessage(center(ChatStyle.DARK_GRAY.toString().concat(vc.getUpdateAvailibleMessage())));
                 }
                 else {
-                    source.sendMessage(center(ChatStyle.GREEN + "Latest Version Installed"));
+                    source.sendMessage(center(ChatStyle.GREEN.toString().concat("Latest Version Installed")));
                 }
             }
             else {
                 source.sendMessage(msg);
             }
+        }
+    }
+
+    private void printSearchResults(CommandSource source, ArrayList<Result> results, String query) {
+        if (results != null && !results.isEmpty()) {
+            source.sendMessage(ChatStyle.AQUA.toString().concat("Search results for \"").concat(query).concat("\":"));
+            Iterator<Result> itr = results.iterator();
+            String line = "";
+            int num = 0;
+            while (itr.hasNext()) {
+                num++;
+                Result result = itr.next();
+                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
+                if (num % 2 == 0 || !itr.hasNext()) {
+                    source.sendMessage(ChatStyle.GOLD.toString().concat(line.trim()));
+                    line = "";
+                }
+                if (num > 16) {
+                    source.sendMessage(ChatStyle.RED.toString().concat("Not all results are displayed. Make your term more specific!"));
+                    break;
+                }
+            }
+        }
+        else {
+            source.sendMessage(ChatStyle.RED.toString().concat("No results found."));
         }
     }
 }

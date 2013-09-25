@@ -17,27 +17,27 @@
  */
 package net.visualillusionsent.searchids.canary;
 
-import net.canarymod.api.entity.living.humanoid.Player;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.visualillusionsent.searchids.DataParser;
-import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIds;
 import net.visualillusionsent.searchids.SearchIdsProperties;
-import net.visualillusionsent.searchids.UpdateThread;
+import net.visualillusionsent.searchids.UpdateTask;
+import net.visualillusionsent.utils.TaskManager;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.concurrent.ScheduledFuture;
 import java.util.logging.Level;
 
 public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implements SearchIds {
 
-    public static DataParser parser;
-    private UpdateThread updateThread;
+    private DataParser parser;
+    private UpdateTask updateTask;
+    private ScheduledFuture<?> updateScheduledTask;
 
     public CanarySearchIds() {
+        super();
     }
 
     public final boolean enable() {
@@ -56,8 +56,8 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
             catch (SAXException ex) {
             }
         }
-        if (updateThread == null) {
-            updateThread = new UpdateThread(this);
+        if (updateTask == null) {
+            updateTask = new UpdateTask(this);
         }
         if (!initData()) {
             getLogman().severe("Could not init the search data from: " + SearchIdsProperties.dataXml + ". Please check that the file exists and is not corrupt.");
@@ -67,10 +67,11 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
             return false;
         }
         if (SearchIdsProperties.autoUpdate) {
-            updateThread.start();
+            int interval = SearchIdsProperties.autoUpdateInterval;
+            updateScheduledTask = TaskManager.scheduleContinuedTaskInMillis(updateTask, interval, interval);
         }
         try {
-            new SearchCommandListener(this);
+            new CanarySearchCommandListener(this);
         }
         catch (CommandDependencyException ex) {
             return false;
@@ -79,21 +80,22 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
     }
 
     public final void disable() {
-        if (updateThread != null) {
-            updateThread.stop();
-            updateThread = null;
+        if (updateScheduledTask != null) {
+            updateScheduledTask.cancel(true);
+            updateScheduledTask = null;
+            updateTask = null;
         }
         parser = null;
     }
 
-    private final boolean initData() {
+    private boolean initData() {
         if ((SearchIdsProperties.dataXml == null) || (SearchIdsProperties.dataXml.equals(""))) {
             return false;
         }
 
         File f = new File(SearchIdsProperties.dataXml);
         if (!f.exists()) {
-            if (!updateThread.updateData(SearchIdsProperties.updateSource)) {
+            if (!updateTask.updateData(SearchIdsProperties.updateSource)) {
                 return false;
             }
         }
@@ -101,54 +103,8 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
         return parser.search("test") != null;
     }
 
-    final void printSearchResults(Player player, ArrayList<Result> results, String query) {
-        if (results != null && !results.isEmpty()) {
-            player.message("§bSearch results for \"" + query + "\":");
-            Iterator<Result> itr = results.iterator();
-            String line = "";
-            int num = 0;
-            while (itr.hasNext()) {
-                num++;
-                Result result = itr.next();
-                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
-                if (num % 2 == 0 || !itr.hasNext()) {
-                    player.message("§6" + line.trim());
-                    line = "";
-                }
-                if (num > 16) {
-                    player.message("§6Not all results are displayed. Make your term more specific!");
-                    break;
-                }
-            }
-        }
-        else {
-            player.message("§cNo results found.");
-        }
-    }
-
-    final void printConsoleSearchResults(ArrayList<Result> results, String query) {
-        if (results != null && !results.isEmpty()) {
-            System.out.println("Search results for \"" + query + "\":");
-            Iterator<Result> itr = results.iterator();
-            String line = "";
-            int num = 0;
-            while (itr.hasNext()) {
-                num++;
-                Result result = itr.next();
-                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
-                if (num % 2 == 0 || !itr.hasNext()) {
-                    System.out.println(line.trim());
-                    line = "";
-                }
-                if (num > 16) {
-                    System.out.println("Not all results are displayed. Make your term more specific!");
-                    break;
-                }
-            }
-        }
-        else {
-            System.out.println("No results found.");
-        }
+    final DataParser getParser() {
+        return parser;
     }
 
     @Override

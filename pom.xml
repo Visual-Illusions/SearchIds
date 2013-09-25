@@ -7,11 +7,12 @@
     <name>SearchIds</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <ProgramStatus>STABLE</ProgramStatus>
+        <program.status>STABLE</program.status>
         <canary.version>1.0-RC-2</canary.version>
         <bukkit.version>1.6.2-R1.0</bukkit.version>
         <spout.version>dev-SNAPSHOT</spout.version>
         <spout.vanilla.version>1.6.2-SNAPSHOT</spout.vanilla.version>
+        <viutils.version>1.1.1</viutils.version>
         <build.number>0-dev</build.number>
         <version.check.url>http://visualillusionsent.net/minecraft/plugins/</version.check.url>
         <devs>darkdiplomat</devs>
@@ -60,6 +61,7 @@
         </repository>
     </distributionManagement>
     <repositories>
+        <!-- VIUtils & Canary -->
         <repository>
             <id>vi-repo</id>
             <name>Visual Illusions Repository</name>
@@ -71,11 +73,13 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
+        <!-- Bukkit -->
         <repository>
             <id>CodeBukkit</id>
             <name>Bukkit Public Repository</name>
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
+        <!-- Spout -->
         <repository>
             <id>spout-repo</id>
             <name>Spout Public Repository</name>
@@ -109,13 +113,13 @@
         <dependency>
             <groupId>net.visualillusionsent</groupId>
             <artifactId>viutils</artifactId>
-            <version>1.1.1</version>
+            <version>${viutils.version}</version>
         </dependency>
         <!-- Libraries End -->
     </dependencies>
     <build>
         <plugins>
-            <!-- Update Canary.inf -->
+            <!-- Update Plugin/Mod Description Files -->
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
@@ -131,7 +135,9 @@
                 <configuration>
                     <includes>
                         <include>target/**/*.inf</include>
+                        <!-- CanaryMod -->
                         <include>target/**/*.yml</include>
+                        <!-- Bukkit/Spout -->
                     </includes>
                     <replacements>
                         <replacement>
@@ -197,7 +203,7 @@
                             <Vendor>Visual Illusions Entertainment</Vendor>
                             <Built-By>${user.name}</Built-By>
                             <Build-Time>${maven.build.timestamp}</Build-Time>
-                            <Class-Path>../lib/viutils-1.1.1.jar</Class-Path>
+                            <Class-Path>../lib/viutils-${viutils.version}.jar</Class-Path>
                         </manifestEntries>
                     </archive>
                 </configuration>

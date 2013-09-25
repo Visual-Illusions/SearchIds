@@ -18,25 +18,28 @@
 package net.visualillusionsent.searchids.canary;
 
 import net.canarymod.Canary;
-import net.canarymod.api.entity.living.humanoid.Player;
-import net.canarymod.chat.Colors;
 import net.canarymod.chat.MessageReceiver;
+import net.canarymod.chat.TextFormat;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandDependencyException;
+import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.StringUtils;
 import net.visualillusionsent.utils.VersionChecker;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * SearchIds Command Listener
  *
  * @author Jason (darkdiplomat)
  */
-public class SearchCommandListener extends VisualIllusionsCanaryPluginInformationCommand {
+public class CanarySearchCommandListener extends VisualIllusionsCanaryPluginInformationCommand {
 
     private final CanarySearchIds searchids;
 
-    public SearchCommandListener(CanarySearchIds searchids) throws CommandDependencyException {
+    public CanarySearchCommandListener(CanarySearchIds searchids) throws CommandDependencyException {
         super(searchids);
         this.searchids = searchids;
         Canary.commands().registerCommands(this, searchids, false);
@@ -49,20 +52,10 @@ public class SearchCommandListener extends VisualIllusionsCanaryPluginInformatio
     public void searchCommand(MessageReceiver receiver, String[] cmd) {
         if (cmd.length > 1) {
             String query = StringUtils.joinString(cmd, " ", 1);
-            if (receiver instanceof Player) {
-                searchids.printSearchResults((Player)receiver, CanarySearchIds.parser.search(query, SearchIdsProperties.base), query);
-            }
-            else {
-                searchids.printConsoleSearchResults(CanarySearchIds.parser.search(query, SearchIdsProperties.base), query);
-            }
+            printSearchResults(receiver, searchids.getParser().search(query, SearchIdsProperties.base), query);
         }
         else {
-            if (receiver instanceof Player) {
-                receiver.message("§cCorrect usage is: /search <Item|Block name>");
-            }
-            else {
-                System.out.println("Correct usage is: /search [item to search for]");
-            }
+            receiver.notice("Correct usage is: /search <Item|Block name>");
         }
     }
 
@@ -76,18 +69,43 @@ public class SearchCommandListener extends VisualIllusionsCanaryPluginInformatio
                 VersionChecker vc = plugin.getVersionChecker();
                 Boolean islatest = vc.isLatest();
                 if (islatest == null) {
-                    msgrec.message(center(Colors.GRAY + "VersionCheckerError: " + vc.getErrorMessage()));
+                    msgrec.message(center(TextFormat.GRAY.concat("VersionCheckerError: ").concat(vc.getErrorMessage())));
                 }
                 else if (!islatest) {
-                    msgrec.message(center(Colors.GRAY + vc.getUpdateAvailibleMessage()));
+                    msgrec.message(center(TextFormat.GRAY.concat(vc.getUpdateAvailibleMessage())));
                 }
                 else {
-                    msgrec.message(center(Colors.LIGHT_GREEN + "Latest Version Installed"));
+                    msgrec.message(center(TextFormat.LIGHT_GREEN.concat("Latest Version Installed")));
                 }
             }
             else {
                 msgrec.message(msg);
             }
+        }
+    }
+
+    private void printSearchResults(MessageReceiver msgrec, ArrayList<Result> results, String query) {
+        if (results != null && !results.isEmpty()) {
+            msgrec.message(TextFormat.CYAN.concat("Search results for \"").concat(query).concat("\":"));
+            Iterator<Result> itr = results.iterator();
+            String line = "";
+            int num = 0;
+            while (itr.hasNext()) {
+                num++;
+                Result result = itr.next();
+                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
+                if (num % 2 == 0 || !itr.hasNext()) {
+                    msgrec.message(TextFormat.ORANGE.concat(line.trim()));
+                    line = "";
+                }
+                if (num > 16) {
+                    msgrec.notice("Not all results are displayed. Make your term more specific!");
+                    break;
+                }
+            }
+        }
+        else {
+            msgrec.notice("No results found.");
         }
     }
 }

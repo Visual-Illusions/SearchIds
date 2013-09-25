@@ -22,7 +22,6 @@ import net.visualillusionsent.utils.VersionChecker;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.FileInputStream;
 import java.net.URISyntaxException;
 import java.security.CodeSource;
 import java.util.jar.JarEntry;
@@ -108,7 +107,7 @@ public abstract class VisualIllusionsBukkitPlugin extends JavaPlugin {
         return getPluginYML().getString("developers", "missing.developers");
     }
 
-    private final YamlConfiguration getPluginYML() {
+    private YamlConfiguration getPluginYML() {
         if (pluginyml == null) {
             pluginyml = new YamlConfiguration();
             try {
@@ -123,7 +122,7 @@ public abstract class VisualIllusionsBukkitPlugin extends JavaPlugin {
         return this.pluginyml;
     }
 
-    private final String getJarPath() { // For when the jar isn't SearchIds.jar
+    private String getJarPath() { // For when the jar isn't SearchIds.jar
         try {
             CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
             return codeSource.getLocation().toURI().getPath();
