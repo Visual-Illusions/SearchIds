@@ -50,7 +50,7 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
     @Permissible("searchids.search")
     public void search(CommandSource source, CommandArguments args) throws CommandException {
         if (args.length() > 0) {
-            printSearchResults(source, searchids.getParser().search(args.toString(), SearchIdsProperties.base), args.toString());
+            printSearchResults(source, searchids.getParser().search(args.toString(), searchids.properties.base()), args.toString());
         }
         else {
             source.sendMessage("§cCorrect usage is: /search [item to search for]");
@@ -88,7 +88,7 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
             while (itr.hasNext()) {
                 num++;
                 Result result = itr.next();
-                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
+                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + searchids.properties.delimiter() + " " + SearchIdsProperties.rightPad(result.getName(), searchids.properties.nameWidth()));
                 if (num % 2 == 0 || !itr.hasNext()) {
                     source.sendMessage(ChatStyle.GOLD.toString().concat(line.trim()));
                     line = "";

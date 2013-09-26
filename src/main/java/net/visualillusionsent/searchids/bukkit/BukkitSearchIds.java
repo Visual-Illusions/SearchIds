@@ -60,7 +60,7 @@ public final class BukkitSearchIds extends VisualIllusionsBukkitPlugin implement
         initialize();
         checkStatus();
         checkVersion();
-        if (!SearchIdsProperties.initProps()) {
+        if (!properties.initProps(this)) {
             getLogger().severe("Could not initialize properties file");
             return;
         }
@@ -77,14 +77,14 @@ public final class BukkitSearchIds extends VisualIllusionsBukkitPlugin implement
             updateTask = new UpdateTask(this);
         }
         if (!initData()) {
-            getLogger().severe("Could not init the search data from: " + SearchIdsProperties.dataXml + ". Please check that the file exists and is not corrupt.");
-            if (!SearchIdsProperties.autoUpdate) {
-                getLogger().severe("Set auto-update-data=true in 'config/SearchIds/SearchIds.cfg' to automatically download the search data file " + SearchIdsProperties.dataXml);
+            getLogger().severe("Could not init the search data from: " + properties.dataXml() + ". Please check that the file exists and is not corrupt.");
+            if (!properties.autoUpdate()) {
+                getLogger().severe("Set auto-update-data=true in 'config/SearchIds/SearchIds.cfg' to automatically download the search data file " + properties.dataXml());
             }
             return;
         }
-        if (SearchIdsProperties.autoUpdate) {
-            int interval = SearchIdsProperties.autoUpdateInterval;
+        if (properties.autoUpdate()) {
+            long interval = properties.autoUpdateInterval();
             updateScheduledTask = TaskManager.scheduleContinuedTaskInMillis(updateTask, interval, interval);
         }
         new BukkitSearchCommandExecutor(this);
@@ -100,13 +100,9 @@ public final class BukkitSearchIds extends VisualIllusionsBukkitPlugin implement
     }
 
     private boolean initData() {
-        if ((SearchIdsProperties.dataXml == null) || (SearchIdsProperties.dataXml.equals(""))) {
-            return false;
-        }
-
-        File f = new File(SearchIdsProperties.dataXml);
+        File f = new File(properties.dataXml());
         if (!f.exists()) {
-            if (!updateTask.updateData(SearchIdsProperties.updateSource)) {
+            if (!updateTask.updateData(properties.updateSource())) {
                 return false;
             }
         }

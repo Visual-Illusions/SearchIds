@@ -24,49 +24,69 @@ import net.visualillusionsent.utils.PropertiesFile;
  *
  * @author Jason (darkdiplomat)
  */
-public enum SearchIdsProperties {
-    $;
-
+public final class SearchIdsProperties {
     private PropertiesFile props;
-    private boolean init;
 
-    public static String searchType = "all";
-    public static String dataXml = "config/SearchIds/search-ids-data.xml";
-    public static String updateSource = "http://dl.visualillusionsent.net/minecraft/plugins/SearchIds/search-ids-data.xml";
-    public static String updateSourceALT = "https://raw.github.com/Visual-Illusions/SearchIds/v3/search-ids-data.xml";
-    public static boolean autoUpdate = true;
-    public static String base = "decimal";
-    public static String baseId = "decimal";
-    public static int nameWidth = 25;
-    public static int numWidth = 4;
-    public static String delimiter = "-";
-    public static int autoUpdateInterval = 600000;
+    public final boolean initProps(SearchIds searchids) {
+        props = new PropertiesFile("config/SearchIds/SearchIds.cfg");
+        props.getString("search-type", "all");
+        props.getString("base", "decimal");
+        props.getString("data-xml", "config/SearchIds/search-ids-data.xml");
+        props.getString("update-source", "http://dl.visualillusionsent.net/minecraft/plugins/SearchIds/search-ids-data.xml");
+        props.getString("update-source-Alternate", "https://raw.github.com/Visual-Illusions/SearchIds/v3/search-ids-data.xml");
+        props.getBoolean("auto-update-data", true);
+        props.getInt("auto-update-interval", 600000);
+        props.getInt("width-blockname", 25);
+        props.getInt("width-number", 4);
+        props.getCharacter("delimiter", '-');
 
-    private SearchIdsProperties() {
+        if (props.getInt("auto-update-interval") < 60000) {
+            props.setInt("auto-update-interval", 60000);
+            searchids.warning("auto-update-interval cannot be less than 60000! auto-update-interval set to 60000");
+        }
+
+        props.save();
+        return true;
     }
 
-    public static boolean initProps() {
-        if ($.init) {
-            return false;
-        }
+    public final String searchType() {
+        return props.getString("search-type");
+    }
 
-        $.props = new PropertiesFile("config/SearchIds/SearchIds.cfg");
-        searchType = $.props.getString("search-type", searchType);
-        base = $.props.getString("base", base);
-        dataXml = $.props.getString("data-xml", dataXml);
-        updateSource = $.props.getString("update-source", updateSource);
-        updateSourceALT = $.props.getString("update-source-Alternate", updateSourceALT);
-        autoUpdate = $.props.getBoolean("auto-update-data", autoUpdate);
-        autoUpdateInterval = $.props.getInt("auto-update-interval", autoUpdateInterval);
-        nameWidth = $.props.getInt("width-blockname", nameWidth);
-        numWidth = $.props.getInt("width-number", numWidth);
-        delimiter = $.props.getString("delimiter", delimiter);
-        if (autoUpdateInterval < 60000) {
-            autoUpdateInterval = 60000;
-            //ids.warning("[SearchIds] auto-update-interval cannot be less than 60000! auto-update-interval set to 60000");
-        }
-        $.props.save();
-        return true;
+    public final String base() {
+        return props.getString("base");
+    }
+
+    public final String dataXml() {
+        return props.getString("data-xml");
+    }
+
+    public final String updateSource() {
+        return props.getString("update-source");
+    }
+
+    public final String updateSourceALT() {
+        return props.getString("update-source-Alternate");
+    }
+
+    public final boolean autoUpdate() {
+        return props.getBoolean("auto-update-data");
+    }
+
+    public final long autoUpdateInterval() {
+        return props.getLong("auto-update-interval");
+    }
+
+    public final int nameWidth() {
+        return props.getInt("width-blockname");
+    }
+
+    public final int numWidth() {
+        return props.getInt("width-number");
+    }
+
+    public final char delimiter() {
+        return props.getCharacter("delimiter");
     }
 
     public static String leftPad(String s, int width) {

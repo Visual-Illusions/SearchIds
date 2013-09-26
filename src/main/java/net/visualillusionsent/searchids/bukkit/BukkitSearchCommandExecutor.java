@@ -51,7 +51,7 @@ public class BukkitSearchCommandExecutor extends VisualIllusionsBukkitPluginInfo
         if (label.equals("search")) {
             if (args.length > 0) {
                 String query = StringUtils.join(args, ' ', 0, args.length - 1);
-                printSearchResults((Player)sender, searchids.getParser().search(query, SearchIdsProperties.base), query);
+                printSearchResults((Player)sender, searchids.getParser().search(query, searchids.properties.base()), query);
             }
             else {
                 sender.sendMessage("§cCorrect usage is: /search [item to search for]");
@@ -90,7 +90,7 @@ public class BukkitSearchCommandExecutor extends VisualIllusionsBukkitPluginInfo
             while (itr.hasNext()) {
                 num++;
                 Result result = itr.next();
-                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
+                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + searchids.properties.delimiter() + " " + SearchIdsProperties.rightPad(result.getName(), searchids.properties.nameWidth()));
                 if (num % 2 == 0 || !itr.hasNext()) {
                     sender.sendMessage(ChatColor.GOLD.toString().concat(line.trim()));
                     line = "";

@@ -24,7 +24,9 @@ package net.visualillusionsent.searchids;
  */
 public interface SearchIds {
 
-    public static String viutils_version = "1.1.1"; // For Bukkit/Spout
+    public final String viutils_version = "1.1.1"; // For Bukkit/Spout
+
+    public final SearchIdsProperties properties = new SearchIdsProperties();
 
     public void info(String msg);
 

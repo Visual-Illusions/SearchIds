@@ -20,7 +20,6 @@ package net.visualillusionsent.searchids.canary;
 import net.canarymod.commandsys.CommandDependencyException;
 import net.visualillusionsent.searchids.DataParser;
 import net.visualillusionsent.searchids.SearchIds;
-import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.searchids.UpdateTask;
 import net.visualillusionsent.utils.TaskManager;
 import org.xml.sax.SAXException;
@@ -43,7 +42,7 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
     public final boolean enable() {
         checkStatus();
         checkVersion();
-        if (!SearchIdsProperties.initProps()) {
+        if (!properties.initProps(this)) {
             getLogman().severe("Could not initialize properties file");
             return false;
         }
@@ -60,14 +59,14 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
             updateTask = new UpdateTask(this);
         }
         if (!initData()) {
-            getLogman().severe("Could not init the search data from: " + SearchIdsProperties.dataXml + ". Please check that the file exists and is not corrupt.");
-            if (!SearchIdsProperties.autoUpdate) {
-                getLogman().severe("Set auto-update-data=true in 'config/SearchIds/SearchIds.cfg' to automatically download the search data file " + SearchIdsProperties.dataXml);
+            getLogman().severe("Could not init the search data from: " + properties.dataXml() + ". Please check that the file exists and is not corrupt.");
+            if (!properties.autoUpdate()) {
+                getLogman().severe("Set auto-update-data=true in 'config/SearchIds/SearchIds.cfg' to automatically download the search data file " + properties.dataXml());
             }
             return false;
         }
-        if (SearchIdsProperties.autoUpdate) {
-            int interval = SearchIdsProperties.autoUpdateInterval;
+        if (properties.autoUpdate()) {
+            long interval = properties.autoUpdateInterval();
             updateScheduledTask = TaskManager.scheduleContinuedTaskInMillis(updateTask, interval, interval);
         }
         try {
@@ -89,14 +88,10 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
     }
 
     private boolean initData() {
-        if ((SearchIdsProperties.dataXml == null) || (SearchIdsProperties.dataXml.equals(""))) {
-            return false;
-        }
-
-        File f = new File(SearchIdsProperties.dataXml);
+        File f = new File(properties.dataXml());
         if (!f.exists()) {
-            if (!updateTask.updateData(SearchIdsProperties.updateSource)) {
-                return false;
+            if (!updateTask.updateData(properties.updateSource())) {
+                return updateTask.updateData(properties.updateSourceALT());
             }
         }
 

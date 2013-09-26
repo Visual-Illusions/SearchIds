@@ -52,7 +52,7 @@ public class CanarySearchCommandListener extends VisualIllusionsCanaryPluginInfo
     public void searchCommand(MessageReceiver receiver, String[] cmd) {
         if (cmd.length > 1) {
             String query = StringUtils.joinString(cmd, " ", 1);
-            printSearchResults(receiver, searchids.getParser().search(query, SearchIdsProperties.base), query);
+            printSearchResults(receiver, searchids.getParser().search(query, searchids.properties.base()), query);
         }
         else {
             receiver.notice("Correct usage is: /search <Item|Block name>");
@@ -93,7 +93,7 @@ public class CanarySearchCommandListener extends VisualIllusionsCanaryPluginInfo
             while (itr.hasNext()) {
                 num++;
                 Result result = itr.next();
-                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + SearchIdsProperties.delimiter + " " + SearchIdsProperties.rightPad(result.getName(), SearchIdsProperties.nameWidth));
+                line += (SearchIdsProperties.rightPad(result.getFullValue(), result.getValuePad()) + " " + searchids.properties.delimiter() + " " + SearchIdsProperties.rightPad(result.getName(), searchids.properties.nameWidth()));
                 if (num % 2 == 0 || !itr.hasNext()) {
                     msgrec.message(TextFormat.ORANGE.concat(line.trim()));
                     line = "";

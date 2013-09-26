@@ -21,7 +21,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -43,7 +42,9 @@ public final class UpdateTask implements Runnable {
     }
 
     public final void run() {
-        updateData(SearchIdsProperties.updateSource);
+        if (!updateData(ids.properties.updateSource())) {
+            updateData(ids.properties.updateSourceALT());
+        }
     }
 
     public final boolean updateData(String source_url) {
@@ -53,7 +54,7 @@ public final class UpdateTask implements Runnable {
         // Only Update if the file is actually different
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            dis = new DigestInputStream(new FileInputStream(SearchIdsProperties.dataXml), md);
+            dis = new DigestInputStream(new FileInputStream(ids.properties.dataXml()), md);
             while (dis.read() != -1) {
             }
             digestLocal = md.digest();
@@ -73,7 +74,7 @@ public final class UpdateTask implements Runnable {
                 try {
                     dis.close();
                 }
-                catch (IOException e) {
+                catch (IOException ioex) {
                 }
             }
         }
@@ -88,26 +89,23 @@ public final class UpdateTask implements Runnable {
         FileOutputStream fos = null;
         boolean success = false, altUp = false;
         try {
-            URL website = new URL(source_url);
-            rbc = Channels.newChannel(website.openStream());
-            fos = new FileOutputStream(SearchIdsProperties.dataXml);
+            rbc = Channels.newChannel(new URL(source_url).openStream());
+            fos = new FileOutputStream(ids.properties.dataXml());
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             ids.info("Update Successful!");
             success = true;
         }
         catch (MalformedURLException e) {
-            if (source_url.equals(SearchIdsProperties.updateSource)) {
+            if (source_url.equals(ids.properties.updateSource())) {
                 ids.warning("Update from " + source_url + " Failed. Attempting Alternate Source...");
-                altUp = true;
             }
             else {
                 ids.warning("Update from " + source_url + " Failed.");
             }
         }
         catch (IOException ioex) {
-            if (source_url.equals(SearchIdsProperties.updateSource)) {
+            if (source_url.equals(ids.properties.updateSource())) {
                 ids.warning("Update from " + source_url + " Failed. Attempting Alternate Source...");
-                altUp = true;
             }
             else {
                 ids.severe("Could not update search data. (Bad URL(s)?)", ioex);
@@ -130,6 +128,6 @@ public final class UpdateTask implements Runnable {
                 }
             }
         }
-        return altUp ? updateData(SearchIdsProperties.updateSourceALT) : success;
+        return success;
     }
 }
