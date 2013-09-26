@@ -148,10 +148,10 @@
                 </executions>
                 <configuration>
                     <includes>
-                        <include>target/**/*.inf</include>
                         <!-- CanaryMod -->
-                        <include>target/**/*.yml</include>
+                        <include>target/**/*.inf</include>
                         <!-- Bukkit/Spout -->
+                        <include>target/**/*.yml</include>
                     </includes>
                     <replacements>
                         <replacement>

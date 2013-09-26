@@ -17,12 +17,18 @@
  */
 package net.visualillusionsent.searchids;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Update Task
@@ -41,6 +47,35 @@ public final class UpdateTask implements Runnable {
     }
 
     public final boolean updateData(String source_url) {
+        ids.info("Updating data from " + source_url + "...");
+        byte[] digestLocal = null, digestRemote = null;
+        // Only Update if the file is actually different
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            InputStream is = new FileInputStream(SearchIdsProperties.dataXml);
+            DigestInputStream dis = new DigestInputStream(is, md);
+            while (dis.read() != -1) {
+            }
+            digestLocal = md.digest();
+            is = new URL(source_url).openStream();
+            dis = new DigestInputStream(is, md);
+            while (dis.read() != -1) {
+            }
+            digestRemote = md.digest();
+        }
+        catch (NoSuchAlgorithmException nsaex) {
+        }
+        catch (FileNotFoundException fnfex) {
+        }
+        catch (IOException ioex) {
+        }
+
+        if (digestLocal != null && digestRemote != null && MessageDigest.isEqual(digestLocal, digestRemote)) {
+            // Checksums match
+            ids.info("Checksums Match; Update not required.");
+            return true;
+        }
+
         ReadableByteChannel rbc = null;
         FileOutputStream fos = null;
         boolean success = false, altUp = false;
@@ -48,7 +83,6 @@ public final class UpdateTask implements Runnable {
             URL website = new URL(source_url);
             rbc = Channels.newChannel(website.openStream());
             fos = new FileOutputStream(SearchIdsProperties.dataXml);
-            ids.info("Updating data from " + source_url + "...");
             fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
             ids.info("Update Successful!");
             success = true;

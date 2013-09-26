@@ -1,7 +1,7 @@
 ;# SearchIds - Canary Plugin Configuration File
 ;# Copyright (c) 2012-2013 Visual Illusions Entertainment
 name=SearchIds
-main-class=net.visualillusionsent.searchIds.canary.CanarySearchIds
+main-class=net.visualillusionsent.searchids.canary.CanarySearchIds
 author=Visual Illusions Entertainment
 version=$plugin.version$
 

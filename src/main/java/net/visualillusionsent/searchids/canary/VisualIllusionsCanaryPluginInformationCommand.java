@@ -51,11 +51,6 @@ public abstract class VisualIllusionsCanaryPluginInformationCommand implements C
         // Next line should always remain at the end of the About
         pre.add(center("§BCopyright © 2012-2013 §AVisual §6I§9l§Bl§4u§As§2i§5o§En§7s §6Entertainment"));
         about = Collections.unmodifiableList(pre);
-        try {
-            Canary.commands().registerCommands(this, plugin, false);
-        }
-        catch (CommandDependencyException ex) {
-        }
     }
 
     protected final String center(String toCenter) {
