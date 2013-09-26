@@ -50,7 +50,7 @@ public final class DataParser {
     public final ArrayList<Result> search(String query, String base) {
         try {
             DataHandler handler = new DataHandler(query);
-            saxParser.parse(SearchIdsProperties.dataXml, handler);
+            saxParser.parse(searchids.properties.dataXml(), handler);
             return handler.getResults();
         }
         catch (Exception e) {
@@ -94,9 +94,9 @@ public final class DataParser {
             if (qName.equalsIgnoreCase("ITEM")) {
                 item = true;
 
-                if (SearchIdsProperties.searchType.equalsIgnoreCase("all") ||
-                        (SearchIdsProperties.searchType.equalsIgnoreCase("blocks") && blocks == true) ||
-                        (SearchIdsProperties.searchType.equalsIgnoreCase("items") && items == true)) {
+                if (searchids.properties.searchType().equalsIgnoreCase("all") ||
+                        (searchids.properties.searchType().equalsIgnoreCase("blocks") && blocks == true) ||
+                        (searchids.properties.searchType().equalsIgnoreCase("items") && items == true)) {
 
                     String name = attributes.getValue("name");
                     String value = attributes.getValue("dec");
@@ -105,10 +105,10 @@ public final class DataParser {
                     if (name != null && value != null) {
                         if (pattern.matcher(name).matches()) {
                             if (id != null) {
-                                results.add(new Result(Integer.valueOf(value), Integer.valueOf(id), name));
+                                results.add(new Result(Integer.valueOf(value), Integer.valueOf(id), name, searchids.properties));
                             }
                             else {
-                                results.add(new Result(Integer.valueOf(value), name));
+                                results.add(new Result(Integer.valueOf(value), name, searchids.properties));
                             }
                         }
                     }

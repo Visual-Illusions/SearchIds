@@ -25,20 +25,25 @@ package net.visualillusionsent.searchids;
  */
 public final class Result {
 
-    private final String name;
-    private final int value;
-    private final int id;
+    private final String name, base;
+    private final int value, id, numWidth;
 
-    public Result(int value, String name) {
+    public Result(int value, String name, SearchIdsProperties properties) {
         this.value = value;
         this.name = name;
         this.id = 0;
+
+        this.base = properties.base();
+        this.numWidth = properties.numWidth();
     }
 
-    public Result(int value, int id, String name) {
+    public Result(int value, int id, String name, SearchIdsProperties properties) {
         this.value = value;
         this.name = name;
         this.id = id;
+
+        this.base = properties.base();
+        this.numWidth = properties.numWidth();
     }
 
     public final String getName() {
@@ -46,7 +51,7 @@ public final class Result {
     }
 
     public final String getValue() {
-        if (SearchIdsProperties.base.equalsIgnoreCase("hex") || SearchIdsProperties.base.equalsIgnoreCase("hexadecimal")) {
+        if (base.equalsIgnoreCase("hex") || base.equalsIgnoreCase("hexadecimal")) {
             return Integer.toHexString(value).toUpperCase();
         }
         else {
@@ -55,7 +60,7 @@ public final class Result {
     }
 
     public final String getId() {
-        if (SearchIdsProperties.baseId.equalsIgnoreCase("hex") || SearchIdsProperties.baseId.equalsIgnoreCase("hexadecimal")) {
+        if (base.equalsIgnoreCase("hex") || base.equalsIgnoreCase("hexadecimal")) {
             return Integer.toHexString(id).toUpperCase();
         }
         else {
@@ -79,10 +84,10 @@ public final class Result {
 
     public final int getValuePad() {
         if (id <= 0) {
-            return SearchIdsProperties.numWidth;
+            return numWidth;
         }
         else {
-            return SearchIdsProperties.numWidth + 3;
+            return numWidth + 3;
         }
     }
 }
