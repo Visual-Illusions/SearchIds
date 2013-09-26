@@ -49,16 +49,15 @@ public final class UpdateTask implements Runnable {
     public final boolean updateData(String source_url) {
         ids.info("Updating data from " + source_url + "...");
         byte[] digestLocal = null, digestRemote = null;
+        DigestInputStream dis = null;
         // Only Update if the file is actually different
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            InputStream is = new FileInputStream(SearchIdsProperties.dataXml);
-            DigestInputStream dis = new DigestInputStream(is, md);
+            dis = new DigestInputStream(new FileInputStream(SearchIdsProperties.dataXml), md);
             while (dis.read() != -1) {
             }
             digestLocal = md.digest();
-            is = new URL(source_url).openStream();
-            dis = new DigestInputStream(is, md);
+            dis = new DigestInputStream(new URL(source_url).openStream(), md);
             while (dis.read() != -1) {
             }
             digestRemote = md.digest();
@@ -68,6 +67,15 @@ public final class UpdateTask implements Runnable {
         catch (FileNotFoundException fnfex) {
         }
         catch (IOException ioex) {
+        }
+        finally {
+            if (dis != null) {
+                try {
+                    dis.close();
+                }
+                catch (IOException e) {
+                }
+            }
         }
 
         if (digestLocal != null && digestRemote != null && MessageDigest.isEqual(digestLocal, digestRemote)) {
