@@ -8,10 +8,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <program.status>ALPHA</program.status>
-        <canary.version>1.0-RC-2</canary.version>
-        <bukkit.version>1.6.2-R1.0</bukkit.version>
-        <spout.version>1.0.0-SNAPSHOT</spout.version>
-        <spout.vanilla.version>1.6.4-SNAPSHOT</spout.vanilla.version>
+        <canary.main.class>${project.groupId}.${project.artifactId}.canary.CanarySearchIds</canary.main.class>
+        <bukkit.main.class>${project.groupId}.${project.artifactId}.bukkit.BukkitSearchIds</bukkit.main.class>
+        <spout.main.class>${project.groupId}.${project.artifactId}.spout.SpoutSearchIds</spout.main.class>
         <viutils.version>1.1.1</viutils.version>
         <vimcplugin.version>1.0u1</vimcplugin.version>
         <build.number>0-dev</build.number>
@@ -95,6 +94,7 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>pre-clean</phase>
                         <goals>
                             <goal>create</goal>
                         </goals>
@@ -123,40 +123,56 @@
                     </includes>
                     <replacements>
                         <replacement>
-                            <token>$plugin.version$</token>
+                            <token>{plugin.version}</token>
                             <value>${project.version}</value>
                         </replacement>
                         <replacement>
-                            <token>$wiki$</token>
+                            <token>{wiki}</token>
                             <value>${project.url}</value>
                         </replacement>
                         <replacement>
-                            <token>$issues$</token>
+                            <token>{issues}</token>
                             <value>${project.issueManagement.url}</value>
                         </replacement>
                         <replace>
-                            <token>$version.check.url$</token>
+                            <token>{version.check.url}</token>
                             <value>${version.check.url}</value>
                         </replace>
                         <replace>
-                            <token>$program.status$</token>
+                            <token>{program.status}</token>
                             <value>${program.status}</value>
                         </replace>
                         <replace>
-                            <token>$build$</token>
+                            <token>{build}</token>
                             <value>${build.number}</value>
                         </replace>
                         <replace>
-                            <token>$build.time$</token>
+                            <token>{build.time}</token>
                             <value>${maven.build.timestamp}</value>
                         </replace>
                         <replace>
-                            <token>$devs$</token>
+                            <token>{devs}</token>
                             <value>${devs}</value>
                         </replace>
                         <replace>
-                            <token>$copyright.years$</token>
+                            <token>{copyright.years}</token>
                             <value>${project.inceptionYear}-${current.year}</value>
+                        </replace>
+                        <replace>
+                            <token>{name}</token>
+                            <value>${project.name}</value>
+                        </replace>
+                        <replace>
+                            <token>{canary.main.class}</token>
+                            <value>${canary.main.class}</value>
+                        </replace>
+                        <replace>
+                            <token>{bukkit.main.class}</token>
+                            <value>${bukkit.main.class}</value>
+                        </replace>
+                        <replace>
+                            <token>{spout.main.class}</token>
+                            <value>${spout.main.class}</value>
                         </replace>
                     </replacements>
                     <regex>false</regex>
