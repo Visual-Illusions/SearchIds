@@ -17,6 +17,7 @@
  */
 package net.visualillusionsent.searchids.spout;
 
+import net.visualillusionsent.minecraft.plugin.spout.VisualIllusionsSpoutPluginInformationCommand;
 import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.VersionChecker;
@@ -51,8 +52,7 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
     public void search(CommandSource source, CommandArguments args) throws CommandException {
         if (args.length() > 0) {
             printSearchResults(source, searchids.getParser().search(args.toString(), searchids.properties.base()), args.toString());
-        }
-        else {
+        } else {
             source.sendMessage("§cCorrect usage is: /search [item to search for]");
         }
     }
@@ -65,15 +65,12 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
                 Boolean islatest = vc.isLatest();
                 if (islatest == null) {
                     source.sendMessage(center(ChatStyle.DARK_GRAY.toString().concat("VersionCheckerError: ").concat(vc.getErrorMessage())));
-                }
-                else if (!islatest) {
+                } else if (!islatest) {
                     source.sendMessage(center(ChatStyle.DARK_GRAY.toString().concat(vc.getUpdateAvailibleMessage())));
-                }
-                else {
+                } else {
                     source.sendMessage(center(ChatStyle.GREEN.toString().concat("Latest Version Installed")));
                 }
-            }
-            else {
+            } else {
                 source.sendMessage(msg);
             }
         }
@@ -98,8 +95,7 @@ public class SpoutSearchCommandExecutor extends VisualIllusionsSpoutPluginInform
                     break;
                 }
             }
-        }
-        else {
+        } else {
             source.sendMessage(ChatStyle.RED.toString().concat("No results found."));
         }
     }

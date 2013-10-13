@@ -10,9 +10,10 @@
         <program.status>ALPHA</program.status>
         <canary.version>1.0-RC-2</canary.version>
         <bukkit.version>1.6.2-R1.0</bukkit.version>
-        <spout.version>dev-SNAPSHOT</spout.version>
-        <spout.vanilla.version>1.6.2-SNAPSHOT</spout.vanilla.version>
+        <spout.version>1.0.0-SNAPSHOT</spout.version>
+        <spout.vanilla.version>1.6.4-SNAPSHOT</spout.vanilla.version>
         <viutils.version>1.1.1</viutils.version>
+        <vimcplugin.version>1.0u1</vimcplugin.version>
         <build.number>0-dev</build.number>
         <version.check.url>http://visualillusionsent.net/minecraft/plugins/</version.check.url>
         <devs>darkdiplomat</devs>
@@ -43,7 +44,6 @@
     <scm>
         <connection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</connection>
         <developerConnection>scm:git:git@github.com:Visual-Illusions/SearchIds.git</developerConnection>
-        <tag>HEAD</tag>
         <url>https://github.com/Visual-Illusions/SearchIds/</url>
     </scm>
     <issueManagement>
@@ -61,7 +61,6 @@
         </repository>
     </distributionManagement>
     <repositories>
-        <!-- VIUtils & Canary -->
         <repository>
             <id>vi-repo</id>
             <name>Visual Illusions Repository</name>
@@ -73,66 +72,35 @@
                 <updatePolicy>always</updatePolicy>
             </snapshots>
         </repository>
-        <!-- Bukkit -->
-        <repository>
-            <id>CodeBukkit</id>
-            <name>Bukkit Public Repository</name>
-            <url>http://repo.bukkit.org/content/groups/public</url>
-        </repository>
-        <!-- Spout -->
-        <repository>
-            <id>spout-repo</id>
-            <name>Spout Public Repository</name>
-            <url>http://nexus.spout.org/content/groups/public/</url>
-        </repository>
-        <!-- Vanilla is in the Sonatype repo -->
-        <repository>
-            <id>sonatype-nexus-releases</id>
-            <url>https://oss.sonatype.org/content/repositories/releases</url>
-        </repository>
-        <repository>
-            <id>sonatype-nexus-snapshots</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
     </repositories>
     <dependencies>
-        <!-- Mods -->
-        <dependency>
-            <groupId>net.canarymod</groupId>
-            <artifactId>CanaryLib</artifactId>
-            <version>${canary.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>${bukkit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spout</groupId>
-            <artifactId>spoutapi</artifactId>
-            <version>${spout.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spout</groupId>
-            <artifactId>vanilla</artifactId>
-            <version>${spout.vanilla.version}</version>
-        </dependency>
-        <!-- Mods End -->
-        <!-- Libraries -->
+        <!-- dependencies pulled from the VIMCPlugin -->
         <dependency>
             <groupId>net.visualillusionsent</groupId>
-            <artifactId>viutils</artifactId>
-            <version>${viutils.version}</version>
+            <artifactId>vimcplugin</artifactId>
+            <version>${vimcplugin.version}</version>
         </dependency>
-        <!-- Libraries End -->
     </dependencies>
     <build>
         <finalName>${project.name}-${project.version}-${program.status}-b${build.number}</finalName>
         <plugins>
+            <!-- Timestamp for year -->
+            <plugin>
+                <groupId>com.keyboardsamurais.maven</groupId>
+                <artifactId>maven-timestamp-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <propertyName>current.year</propertyName>
+                    <timestampPattern>yyyy</timestampPattern>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <!-- Update Plugin/Mod Description Files -->
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
@@ -186,6 +154,10 @@
                             <token>$devs$</token>
                             <value>${devs}</value>
                         </replace>
+                        <replace>
+                            <token>$copyright.years$</token>
+                            <value>${project.inceptionYear}-${current.year}</value>
+                        </replace>
                     </replacements>
                     <regex>false</regex>
                 </configuration>
@@ -212,10 +184,8 @@
                         <manifestEntries>
                             <Title>${project.name}</Title>
                             <Version>${project.version}</Version>
-                            <Build>${buildNumber}</Build>
-                            <ProgramStatus>${ProgramStatus}</ProgramStatus>
+                            <Build>${build.number}</Build>
                             <Vendor>Visual Illusions Entertainment</Vendor>
-                            <Built-By>${user.name}</Built-By>
                             <Build-Time>${maven.build.timestamp}</Build-Time>
                             <Class-Path>../lib/viutils-${viutils.version}.jar</Class-Path>
                         </manifestEntries>
@@ -248,12 +218,70 @@
                     </mapping>
                     <properties>
                         <name>${project.name}</name>
-                        <copyright>Copyright © ${project.inceptionYear}-2013 Visual Illusions Entertainment</copyright>
+                        <copyright>Copyright © ${project.inceptionYear}-${current.year} Visual Illusions Entertainment
+                        </copyright>
                     </properties>
                     <includes>
                         <include>src/main/java/**</include>
                     </includes>
                 </configuration>
+            </plugin>
+            <!-- Need to shade in the needed classes from Visual Illusions Minecraft Plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <!-- Only need to shade the VIMCPlugin stuff -->
+                                    <include>net.visualillusionsent:vimcplugin</include>
+                                </includes>
+                            </artifactSet>
+                            <!-- Filters unused for SearchIds
+                            <filters>
+                                <filter>
+                                    <artifact>net.visualillusionsent:vimcplugin</artifact>
+                                    <includes>
+                                        <include>net/visualillusionsent/minecraft/plugin/canary/**</include>
+                                    </includes>
+                                    <excludes>
+                                        <exclude>net/visualillusionsent/minecraft/plugin/bukkit/**</exclude>
+                                        <exclude>net/visualillusionsent/minecraft/plugin/spout/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            -->
+                            <!-- Relocate the classes to appropriate packages -->
+                            <relocations>
+                                <!-- Canary -->
+                                <relocation>
+                                    <pattern>net.visualillusionsent.minecraft.plugin.canary</pattern>
+                                    <shadedPattern>net.visualillusionsent.searchids.canary</shadedPattern>
+                                </relocation>
+                                <!-- -->
+                                <!-- Bukkit -->
+                                <relocation>
+                                    <pattern>net.visualillusionsent.minecraft.plugin.bukkit</pattern>
+                                    <shadedPattern>net.visualillusionsent.searchids.bukkit</shadedPattern>
+                                </relocation>
+                                <!-- -->
+                                <!-- Spout -->
+                                <relocation>
+                                    <pattern>net.visualillusionsent.minecraft.plugin.spout</pattern>
+                                    <shadedPattern>net.visualillusionsent.searchids.spout</shadedPattern>
+                                </relocation>
+                                <!-- -->
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

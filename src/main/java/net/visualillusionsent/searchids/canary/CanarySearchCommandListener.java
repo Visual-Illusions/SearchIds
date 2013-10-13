@@ -22,6 +22,7 @@ import net.canarymod.chat.MessageReceiver;
 import net.canarymod.chat.TextFormat;
 import net.canarymod.commandsys.Command;
 import net.canarymod.commandsys.CommandDependencyException;
+import net.visualillusionsent.minecraft.plugin.canary.VisualIllusionsCanaryPluginInformationCommand;
 import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.StringUtils;
@@ -53,8 +54,7 @@ public class CanarySearchCommandListener extends VisualIllusionsCanaryPluginInfo
         if (cmd.length > 1) {
             String query = StringUtils.joinString(cmd, " ", 1);
             printSearchResults(receiver, searchids.getParser().search(query, searchids.properties.base()), query);
-        }
-        else {
+        } else {
             receiver.notice("Correct usage is: /search <Item|Block name>");
         }
     }
@@ -70,15 +70,12 @@ public class CanarySearchCommandListener extends VisualIllusionsCanaryPluginInfo
                 Boolean islatest = vc.isLatest();
                 if (islatest == null) {
                     msgrec.message(center(TextFormat.GRAY.concat("VersionCheckerError: ").concat(vc.getErrorMessage())));
-                }
-                else if (!islatest) {
+                } else if (!islatest) {
                     msgrec.message(center(TextFormat.GRAY.concat(vc.getUpdateAvailibleMessage())));
-                }
-                else {
+                } else {
                     msgrec.message(center(TextFormat.LIGHT_GREEN.concat("Latest Version Installed")));
                 }
-            }
-            else {
+            } else {
                 msgrec.message(msg);
             }
         }
@@ -103,8 +100,7 @@ public class CanarySearchCommandListener extends VisualIllusionsCanaryPluginInfo
                     break;
                 }
             }
-        }
-        else {
+        } else {
             msgrec.notice("No results found.");
         }
     }

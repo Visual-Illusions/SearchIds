@@ -17,6 +17,7 @@
  */
 package net.visualillusionsent.searchids.bukkit;
 
+import net.visualillusionsent.minecraft.plugin.bukkit.VisualIllusionsBukkitPluginInformationCommand;
 import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIdsProperties;
 import net.visualillusionsent.utils.VersionChecker;
@@ -51,29 +52,24 @@ public class BukkitSearchCommandExecutor extends VisualIllusionsBukkitPluginInfo
         if (label.equals("search")) {
             if (args.length > 0) {
                 String query = StringUtils.join(args, ' ', 0, args.length - 1);
-                printSearchResults((Player)sender, searchids.getParser().search(query, searchids.properties.base()), query);
-            }
-            else {
+                printSearchResults((Player) sender, searchids.getParser().search(query, searchids.properties.base()), query);
+            } else {
                 sender.sendMessage("§cCorrect usage is: /search [item to search for]");
             }
             return true;
-        }
-        else if (label.equals("searchids")) {
+        } else if (label.equals("searchids")) {
             for (String msg : about) {
                 if (msg.equals("$VERSION_CHECK$")) {
                     VersionChecker vc = plugin.getVersionChecker();
                     Boolean islatest = vc.isLatest();
                     if (islatest == null) {
                         sender.sendMessage(center(ChatColor.DARK_GRAY.toString().concat("VersionCheckerError: ").concat(vc.getErrorMessage())));
-                    }
-                    else if (!islatest) {
+                    } else if (!islatest) {
                         sender.sendMessage(center(ChatColor.DARK_GRAY.toString().concat(vc.getUpdateAvailibleMessage())));
-                    }
-                    else {
+                    } else {
                         sender.sendMessage(center(ChatColor.GREEN.toString().concat("Latest Version Installed")));
                     }
-                }
-                else {
+                } else {
                     sender.sendMessage(msg);
                 }
             }
@@ -100,8 +96,7 @@ public class BukkitSearchCommandExecutor extends VisualIllusionsBukkitPluginInfo
                     break;
                 }
             }
-        }
-        else {
+        } else {
             sender.sendMessage(ChatColor.RED.toString().concat("No results found."));
         }
     }

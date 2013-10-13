@@ -17,6 +17,7 @@
  */
 package net.visualillusionsent.searchids.spout;
 
+import net.visualillusionsent.minecraft.plugin.spout.VisualIllusionsSpoutPlugin;
 import net.visualillusionsent.searchids.DataParser;
 import net.visualillusionsent.searchids.Result;
 import net.visualillusionsent.searchids.SearchIds;
@@ -55,8 +56,7 @@ public final class SpoutSearchIds extends VisualIllusionsSpoutPlugin implements 
                 ReadableByteChannel rbc = Channels.newChannel(website.openStream());
                 FileOutputStream fos = new FileOutputStream("lib/viutils-" + viutils_version + ".jar");
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("Failed to download VIUtils " + viutils_version);
             }
         }
@@ -74,10 +74,8 @@ public final class SpoutSearchIds extends VisualIllusionsSpoutPlugin implements 
         if (parser == null) {
             try {
                 parser = new DataParser(this);
-            }
-            catch (ParserConfigurationException ex) {
-            }
-            catch (SAXException ex) {
+            } catch (ParserConfigurationException ex) {
+            } catch (SAXException ex) {
             }
         }
 
@@ -128,8 +126,7 @@ public final class SpoutSearchIds extends VisualIllusionsSpoutPlugin implements 
         try {
             CodeSource codeSource = this.getClass().getProtectionDomain().getCodeSource();
             return codeSource.getLocation().toURI().getPath();
-        }
-        catch (URISyntaxException ex) {
+        } catch (URISyntaxException ex) {
         }
         return "plugins/SearchIds.jar";
     }

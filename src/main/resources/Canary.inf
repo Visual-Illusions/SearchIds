@@ -13,3 +13,4 @@ program.status=$program.status$
 version.check.url=$version.check.url$
 wiki.url=$wiki$
 issues.url=$issues$
+copyright.years=$copyright.years$

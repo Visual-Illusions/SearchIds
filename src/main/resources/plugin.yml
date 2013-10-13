@@ -13,6 +13,7 @@ build.time: $build.time$
 program.status: $program.status$
 version.check.url: $version.check.url$
 issues.url: $issues$
+copyright.years: $copyright.years$
 # # #
 
 commands:

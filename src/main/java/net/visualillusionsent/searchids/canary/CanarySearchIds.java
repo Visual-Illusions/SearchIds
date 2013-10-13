@@ -18,6 +18,7 @@
 package net.visualillusionsent.searchids.canary;
 
 import net.canarymod.commandsys.CommandDependencyException;
+import net.visualillusionsent.minecraft.plugin.canary.VisualIllusionsCanaryPlugin;
 import net.visualillusionsent.searchids.DataParser;
 import net.visualillusionsent.searchids.SearchIds;
 import net.visualillusionsent.searchids.UpdateTask;
@@ -49,10 +50,8 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
         if (parser == null) {
             try {
                 parser = new DataParser(this);
-            }
-            catch (ParserConfigurationException ex) {
-            }
-            catch (SAXException ex) {
+            } catch (ParserConfigurationException ex) {
+            } catch (SAXException ex) {
             }
         }
         if (updateTask == null) {
@@ -71,8 +70,7 @@ public final class CanarySearchIds extends VisualIllusionsCanaryPlugin implement
         }
         try {
             new CanarySearchCommandListener(this);
-        }
-        catch (CommandDependencyException ex) {
+        } catch (CommandDependencyException ex) {
             return false;
         }
         return true;

@@ -17,6 +17,7 @@
  */
 package net.visualillusionsent.searchids.bukkit;
 
+import net.visualillusionsent.minecraft.plugin.bukkit.VisualIllusionsBukkitPlugin;
 import net.visualillusionsent.searchids.DataParser;
 import net.visualillusionsent.searchids.SearchIds;
 import net.visualillusionsent.searchids.SearchIdsProperties;
@@ -48,8 +49,7 @@ public final class BukkitSearchIds extends VisualIllusionsBukkitPlugin implement
                 ReadableByteChannel rbc = Channels.newChannel(website.openStream());
                 FileOutputStream fos = new FileOutputStream("lib/viutils-" + viutils_version + ".jar");
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 System.out.println("Failed to download VIUtils " + viutils_version);
             }
         }
@@ -67,10 +67,8 @@ public final class BukkitSearchIds extends VisualIllusionsBukkitPlugin implement
         if (parser == null) {
             try {
                 parser = new DataParser(this);
-            }
-            catch (ParserConfigurationException ex) {
-            }
-            catch (SAXException ex) {
+            } catch (ParserConfigurationException ex) {
+            } catch (SAXException ex) {
             }
         }
         if (updateTask == null) {
